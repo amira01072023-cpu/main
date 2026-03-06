@@ -81,7 +81,7 @@ return (
 <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
 <div className="flex items-center gap-2">
 <Megaphone className="text-blue-600" size={20} />
-<span className="font-bold text-lg">UAE Directory Pro</span>
+<span className="font-bold text-lg tracking-tight">UAE Biz Connect</span>
 </div>
 <nav className="hidden md:flex items-center gap-5 text-sm">
 <a href="#" className="hover:text-blue-600">Home</a>
@@ -99,7 +99,7 @@ List Your Business
 <section className="bg-gradient-to-r from-blue-700 to-blue-500 text-white">
 <div className="max-w-6xl mx-auto px-4 py-16">
 <p className="text-blue-100 mb-2">Trusted UAE Business Directory</p>
-<h1 className="text-3xl md:text-5xl font-bold leading-tight max-w-3xl">
+<h1 className="text-3xl md:text-5xl font-extrabold leading-tight max-w-3xl">
 Find Local Businesses, Services & Contacts Across the UAE
 </h1>
 <p className="mt-4 text-blue-100 max-w-2xl">
@@ -148,7 +148,8 @@ Search Now
 {categories.map((cat) => (
 <div
 key={cat.name}
-className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-md transition"
+className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-lg hover:-translate-y-0.5 transition duration-200"
+
 >
 <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center mb-3">
 {cat.icon}
@@ -171,7 +172,7 @@ className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-md trans
 {featuredListings.map((item) => (
 <article
 key={item.id}
-className="bg-white rounded-xl border border-slate-200 p-5 hover:shadow-md transition"
+className="bg-white rounded-xl border border-slate-200 p-5 hover:shadow-lg hover:-translate-y-0.5 transition duration-200"
 >
 <div className="flex items-start justify-between gap-3">
 <div>
