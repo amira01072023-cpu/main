@@ -1,239 +1,263 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabase";
+import { Search, MapPin, Phone, Star, Building2, Briefcase, Stethoscope, Wrench, Car, GraduationCap, ShoppingBag, Utensils, Megaphone } from "lucide-react";
+
+type Category = {
+name: string;
+icon: React.ReactNode;
+count: string;
+};
 
 type Listing = {
 id: number;
-title: string;
-created_at: string;
-user_id: string;
+name: string;
+category: string;
+location: string;
+phone: string;
+rating: number;
+reviews: number;
+featured?: boolean;
 };
 
+const categories: Category[] = [
+{ name: "Restaurants", icon: <Utensils size={18} />, count: "1,250+" },
+{ name: "Shopping", icon: <ShoppingBag size={18} />, count: "980+" },
+{ name: "Healthcare", icon: <Stethoscope size={18} />, count: "640+" },
+{ name: "Automotive", icon: <Car size={18} />, count: "720+" },
+{ name: "Education", icon: <GraduationCap size={18} />, count: "410+" },
+{ name: "Home Services", icon: <Wrench size={18} />, count: "860+" },
+{ name: "Real Estate", icon: <Building2 size={18} />, count: "530+" },
+{ name: "Business Services", icon: <Briefcase size={18} />, count: "770+" },
+];
+
+const featuredListings: Listing[] = [
+{
+id: 1,
+name: "Al Noor Electronics",
+category: "Shopping",
+location: "Dubai, UAE",
+phone: "+971 4 123 4567",
+rating: 4.7,
+reviews: 128,
+featured: true,
+},
+{
+id: 2,
+name: "Blue Wave Dental Clinic",
+category: "Healthcare",
+location: "Abu Dhabi, UAE",
+phone: "+971 2 555 7890",
+rating: 4.8,
+reviews: 94,
+featured: true,
+},
+{
+id: 3,
+name: "QuickFix Auto Garage",
+category: "Automotive",
+location: "Sharjah, UAE",
+phone: "+971 6 222 8899",
+rating: 4.6,
+reviews: 76,
+featured: true,
+},
+{
+id: 4,
+name: "Citywide Cleaning Services",
+category: "Home Services",
+location: "Ajman, UAE",
+phone: "+971 6 888 1122",
+rating: 4.5,
+reviews: 52,
+featured: true,
+},
+];
+
 export default function Page() {
-const [rows, setRows] = useState<Listing[]>([]);
-const [title, setTitle] = useState("");
-const [status, setStatus] = useState("Loading...");
-const [userId, setUserId] = useState<string | null>(null);
-
-const [email, setEmail] = useState("");
-const [password, setPassword] = useState("");
-
-// edit state
-const [editingId, setEditingId] = useState<number | null>(null);
-const [editTitle, setEditTitle] = useState("");
-
-async function loadSession() {
-const { data } = await supabase.auth.getSession();
-setUserId(data.session?.user?.id ?? null);
-}
-
-async function loadListings() {
-const { data: sessionData } = await supabase.auth.getSession();
-const uid = sessionData.session?.user?.id;
-
-if (!uid) {
-setRows([]);
-setStatus("Please sign in.");
-return;
-}
-
-const { data, error } = await supabase
-.from("listings")
-.select("*")
-.order("created_at", { ascending: false });
-
-if (error) {
-setStatus(`Error: ${error.message}`);
-return;
-}
-
-setRows((data as Listing[]) || []);
-setStatus("✅ Signed in and fetched your listings");
-}
-
-async function signUp() {
-const { error } = await supabase.auth.signUp({ email, password });
-setStatus(error ? `Signup error: ${error.message}` : "Signup success. Now sign in.");
-}
-
-async function signIn() {
-const { error } = await supabase.auth.signInWithPassword({ email, password });
-if (error) {
-setStatus(`Sign-in error: ${error.message}`);
-return;
-}
-await loadSession();
-await loadListings();
-}
-
-async function signOut() {
-await supabase.auth.signOut();
-setUserId(null);
-setRows([]);
-setEditingId(null);
-setEditTitle("");
-setStatus("Signed out.");
-}
-
-async function addListing(e: React.FormEvent) {
-e.preventDefault();
-if (!title.trim() || !userId) return;
-
-const { error } = await supabase
-.from("listings")
-.insert({ title: title.trim(), user_id: userId });
-
-if (error) {
-setStatus(`Insert error: ${error.message}`);
-return;
-}
-
-setTitle("");
-await loadListings();
-}
-
-async function deleteListing(id: number) {
-const { error } = await supabase.from("listings").delete().eq("id", id);
-
-if (error) {
-setStatus(`Delete error: ${error.message}`);
-return;
-}
-
-await loadListings();
-}
-
-function startEdit(row: Listing) {
-setEditingId(row.id);
-setEditTitle(row.title);
-}
-
-function cancelEdit() {
-setEditingId(null);
-setEditTitle("");
-}
-
-async function saveEdit(id: number) {
-if (!editTitle.trim()) return;
-
-const { error } = await supabase
-.from("listings")
-.update({ title: editTitle.trim() })
-.eq("id", id);
-
-if (error) {
-setStatus(`Update error: ${error.message}`);
-return;
-}
-
-cancelEdit();
-await loadListings();
-}
-
-useEffect(() => {
-loadSession().then(loadListings);
-
-const {
-data: { subscription },
-} = supabase.auth.onAuthStateChange(() => {
-loadSession().then(loadListings);
-});
-
-return () => subscription.unsubscribe();
-}, []);
-
 return (
-<main style={{ padding: 24, maxWidth: 860 }}>
-<h1>Supabase Listings (Auth + Edit)</h1>
-<p>{status}</p>
-
-{!userId ? (
-<div style={{ marginBottom: 20 }}>
-<input
-value={email}
-onChange={(e) => setEmail(e.target.value)}
-placeholder="Email"
-style={{ padding: 8, marginRight: 8 }}
-/>
-<input
-value={password}
-onChange={(e) => setPassword(e.target.value)}
-type="password"
-placeholder="Password"
-style={{ padding: 8, marginRight: 8 }}
-/>
-<button onClick={signUp} style={{ marginRight: 8 }}>Sign up</button>
-<button onClick={signIn}>Sign in</button>
+<main className="min-h-screen bg-[#f8fafc] text-slate-800">
+{/* Top bar */}
+<header className="bg-white border-b border-slate-200 sticky top-0 z-20">
+<div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+<div className="flex items-center gap-2">
+<Megaphone className="text-blue-600" size={20} />
+<span className="font-bold text-lg">UAE Directory Pro</span>
 </div>
-) : (
-<>
-<button onClick={signOut} style={{ marginBottom: 12 }}>Sign out</button>
-
-<form onSubmit={addListing} style={{ marginBottom: 20 }}>
-<input
-value={title}
-onChange={(e) => setTitle(e.target.value)}
-placeholder="Enter listing title"
-style={{ padding: 8, width: 280, marginRight: 8 }}
-/>
-<button type="submit" style={{ padding: "8px 12px" }}>
-Add Listing
+<nav className="hidden md:flex items-center gap-5 text-sm">
+<a href="#" className="hover:text-blue-600">Home</a>
+<a href="#" className="hover:text-blue-600">Categories</a>
+<a href="#" className="hover:text-blue-600">Cities</a>
+<a href="#" className="hover:text-blue-600">Advertise</a>
+</nav>
+<button className="bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700">
+List Your Business
 </button>
-</form>
+</div>
+</header>
 
-{rows.length === 0 ? (
-<p>No listings yet.</p>
-) : (
-<ul style={{ listStyle: "none", padding: 0 }}>
-{rows.map((row) => (
-<li
-key={row.id}
-style={{
-display: "flex",
-justifyContent: "space-between",
-alignItems: "center",
-border: "1px solid #ddd",
-borderRadius: 8,
-padding: 10,
-marginBottom: 8,
-gap: 10,
-}}
->
-<div style={{ flex: 1 }}>
-{editingId === row.id ? (
+{/* Hero */}
+<section className="bg-gradient-to-r from-blue-700 to-blue-500 text-white">
+<div className="max-w-6xl mx-auto px-4 py-16">
+<p className="text-blue-100 mb-2">Trusted UAE Business Directory</p>
+<h1 className="text-3xl md:text-5xl font-bold leading-tight max-w-3xl">
+Find Local Businesses, Services & Contacts Across the UAE
+</h1>
+<p className="mt-4 text-blue-100 max-w-2xl">
+Search by business name, category, or location and connect instantly.
+</p>
+
+{/* Search box */}
+<div className="mt-8 bg-white rounded-xl p-3 md:p-4 shadow-lg">
+<div className="grid md:grid-cols-3 gap-3">
+<div className="flex items-center gap-2 border border-slate-200 rounded-lg px-3 py-2">
+<Search size={18} className="text-slate-500" />
 <input
-value={editTitle}
-onChange={(e) => setEditTitle(e.target.value)}
-style={{ padding: 8, width: "100%" }}
+placeholder="What are you looking for?"
+className="w-full outline-none text-slate-700"
 />
-) : (
-<span>
-<strong>{row.title}</strong> —{" "}
-{new Date(row.created_at).toLocaleString()}
+</div>
+<div className="flex items-center gap-2 border border-slate-200 rounded-lg px-3 py-2">
+<Building2 size={18} className="text-slate-500" />
+<input
+placeholder="Category (e.g. Restaurants)"
+className="w-full outline-none text-slate-700"
+/>
+</div>
+<div className="flex items-center gap-2 border border-slate-200 rounded-lg px-3 py-2">
+<MapPin size={18} className="text-slate-500" />
+<input
+placeholder="City (e.g. Dubai)"
+className="w-full outline-none text-slate-700"
+/>
+</div>
+</div>
+<button className="mt-3 w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium">
+Search Now
+</button>
+</div>
+</div>
+</section>
+
+{/* Popular categories */}
+<section className="max-w-6xl mx-auto px-4 py-12">
+<div className="flex items-end justify-between mb-5">
+<h2 className="text-2xl font-bold">Popular Categories</h2>
+<a href="#" className="text-blue-600 text-sm hover:underline">View all</a>
+</div>
+<div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
+{categories.map((cat) => (
+<div
+key={cat.name}
+className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-md transition"
+>
+<div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center mb-3">
+{cat.icon}
+</div>
+<h3 className="font-semibold">{cat.name}</h3>
+<p className="text-sm text-slate-500">{cat.count} businesses</p>
+</div>
+))}
+</div>
+</section>
+
+{/* Featured listings */}
+<section className="max-w-6xl mx-auto px-4 pb-12">
+<div className="flex items-end justify-between mb-5">
+<h2 className="text-2xl font-bold">Featured Listings</h2>
+<a href="#" className="text-blue-600 text-sm hover:underline">Browse all</a>
+</div>
+
+<div className="grid md:grid-cols-2 gap-4">
+{featuredListings.map((item) => (
+<article
+key={item.id}
+className="bg-white rounded-xl border border-slate-200 p-5 hover:shadow-md transition"
+>
+<div className="flex items-start justify-between gap-3">
+<div>
+<h3 className="text-lg font-bold">{item.name}</h3>
+<p className="text-sm text-slate-500">{item.category}</p>
+</div>
+{item.featured && (
+<span className="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-md font-medium">
+Featured
 </span>
 )}
 </div>
 
-<div style={{ display: "flex", gap: 8 }}>
-{editingId === row.id ? (
-<>
-<button onClick={() => saveEdit(row.id)}>Save</button>
-<button onClick={cancelEdit}>Cancel</button>
-</>
-) : (
-<>
-<button onClick={() => startEdit(row)}>Edit</button>
-<button onClick={() => deleteListing(row.id)}>Delete</button>
-</>
-)}
+<div className="mt-4 space-y-2 text-sm text-slate-600">
+<p className="flex items-center gap-2">
+<MapPin size={15} /> {item.location}
+</p>
+<p className="flex items-center gap-2">
+<Phone size={15} /> {item.phone}
+</p>
+<p className="flex items-center gap-1">
+<Star size={15} className="text-amber-500 fill-amber-500" />
+<span className="font-medium text-slate-700">{item.rating}</span>
+<span className="text-slate-500">({item.reviews} reviews)</span>
+</p>
 </div>
-</li>
+
+<div className="mt-4 flex gap-2">
+<button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">
+View Details
+</button>
+<button className="border border-slate-300 px-4 py-2 rounded-lg text-sm hover:bg-slate-50">
+Call Now
+</button>
+</div>
+</article>
 ))}
+</div>
+</section>
+
+{/* CTA */}
+<section className="bg-white border-y border-slate-200">
+<div className="max-w-6xl mx-auto px-4 py-12 text-center">
+<h2 className="text-2xl md:text-3xl font-bold">
+Own a business in the UAE?
+</h2>
+<p className="text-slate-600 mt-2">
+Get discovered by thousands of potential customers every day.
+</p>
+<button className="mt-5 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+Add Your Business
+</button>
+</div>
+</section>
+
+{/* Footer */}
+<footer className="bg-slate-900 text-slate-300">
+<div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-8">
+<div>
+<h3 className="text-white font-bold mb-3">UAE Directory Pro</h3>
+<p className="text-sm text-slate-400">
+Your trusted local business directory for all Emirates.
+</p>
+</div>
+<div>
+<h4 className="text-white font-semibold mb-3">Top Cities</h4>
+<ul className="space-y-1 text-sm text-slate-400">
+<li>Dubai</li>
+<li>Abu Dhabi</li>
+<li>Sharjah</li>
+<li>Ajman</li>
 </ul>
-)}
-</>
-)}
+</div>
+<div>
+<h4 className="text-white font-semibold mb-3">Support</h4>
+<ul className="space-y-1 text-sm text-slate-400">
+<li>Contact Us</li>
+<li>Privacy Policy</li>
+<li>Terms of Use</li>
+</ul>
+</div>
+</div>
+<div className="border-t border-slate-800 text-center text-xs text-slate-500 py-4">
+© {new Date().getFullYear()} UAE Directory Pro. All rights reserved.
+</div>
+</footer>
 </main>
 );
 }
