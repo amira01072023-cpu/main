@@ -356,6 +356,27 @@ className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-md trans
 
 {/* Footer */}
 <footer className="bg-slate-950 text-slate-300">
+<section className="max-w-6xl mx-auto px-4 pb-12">
+<h2 className="text-2xl font-bold mb-4">Browse by Category</h2>
+<div className="flex flex-wrap gap-2">
+{[
+{ label: "HVAC", slug: "hvac" },
+{ label: "Building Maintenance", slug: "building-maintenance" },
+{ label: "Electrical", slug: "electrical" },
+{ label: "Plumbing", slug: "plumbing" },
+{ label: "General Services", slug: "general-services" },
+{ label: "Directory", slug: "directory" },
+].map((c) => (
+<Link
+key={c.slug}
+href={`/category/${c.slug}`}
+className="bg-white border border-slate-300 px-4 py-2 rounded-lg text-sm hover:bg-slate-50"
+>
+{c.label}
+</Link>
+))}
+</div>
+</section>
 <div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-8">
 <div>
 <h3 className="text-white font-bold mb-3">UAE Biz Connect</h3>
