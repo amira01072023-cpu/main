@@ -1,8 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  reactCompiler: true,
+turbopack: {
+root: "/home/pgc/uae-directory-pro",
+},
 };
 
 export default nextConfig;

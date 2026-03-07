@@ -6,10 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "scrape": "node scripts/scraper/run.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.98.0",
+    "csv-parse": "^6.1.0",
     "lucide-react": "^0.576.0",
     "next": "16.1.6",
     "react": "19.2.3",
