@@ -362,3 +362,12 @@ Error: Can't resolve 'tailwindcss' in '/home/pgc'
  GET /privacy-policy 200 in 89ms (compile: 4ms, render: 85ms)
  GET /terms-of-use 200 in 46ms (compile: 2ms, render: 44ms)
  GET / 200 in 105ms (compile: 8ms, render: 96ms)
+ GET / 200 in 126ms (compile: 5ms, render: 121ms)
+ GET /api/listings/popular-categories 200 in 1185ms (compile: 5ms, render: 1180ms)
+ GET /api/listings?limit=10&page=1 200 in 1247ms (compile: 12ms, render: 1235ms)
+ GET /api/listings/filters 200 in 1249ms (compile: 33ms, render: 1216ms)
+ GET /api/listings?page=1&limit=5 200 in 767ms (compile: 17ms, render: 750ms)
+ GET /api/listings?limit=10&page=2 200 in 410ms (compile: 5ms, render: 405ms)
+ GET /api/listings?limit=10&page=3 200 in 343ms (compile: 3ms, render: 340ms)
+ GET /api/listings?limit=10&page=4 200 in 375ms (compile: 4ms, render: 372ms)
+[?25h

@@ -18,10 +18,15 @@ let query = supabase
 .select("id,business_name,category,city,phone,website_url", { count: "exact" });
 
 if (q) query = query.ilike("business_name", `%${q}%`);
-if (category) query = query.eq("category", category); // exact match now
-if (city) query = query.eq("city", city); // exact match now
+if (category) query = query.ilike("category", `%${category}%`);
+if (city) query = query.ilike("city", `%${city}%`);
 
-const { data, error, count } = await query.order("id", { ascending: false }).range(from, to);
+const { data, error, count } = await query
+// website rows first
+.order("website_url", { ascending: false, nullsFirst: false })
+// then newest
+.order("id", { ascending: false })
+.range(from, to);
 
 if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
