@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase-browser";
 
 export default function AuthPage() {
 const supabase = createClient();
+
 const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
 const [isSignUp, setIsSignUp] = useState(true);
@@ -15,20 +16,31 @@ setMsg("");
 if (!email || !password) return setMsg("Email and password required.");
 
 if (isSignUp) {
-const { error } = await supabase.auth.signUp({
-email,
-password,
-});
-if (error) setMsg(error.message);
-else setMsg("Account created. Check your email if confirmation is enabled.");
-} else {
-const { error } = await supabase.auth.signInWithPassword({
-email,
-password,
-});
-if (error) setMsg(error.message);
-else window.location.href = "/list-your-business";
+const { error } = await supabase.auth.signUp({ email, password });
+
+if (error) {
+const m = (error.message || "").toLowerCase();
+
+if (
+m.includes("already registered") ||
+m.includes("already exists") ||
+m.includes("user already registered")
+) {
+setIsSignUp(false);
+return setMsg("This email is already registered. Please sign in.");
 }
+
+return setMsg(error.message);
+}
+
+return setMsg("Account created. Check your email if confirmation is enabled.");
+}
+
+// Sign in mode
+const { error } = await supabase.auth.signInWithPassword({ email, password });
+if (error) return setMsg(error.message);
+
+window.location.href = "/list-your-business";
 };
 
 return (
@@ -38,11 +50,13 @@ return (
 <p className="text-sm text-slate-500 mb-6">Use your email and password.</p>
 
 <input
+type="email"
 className="w-full border rounded-lg px-3 py-2 mb-3"
 placeholder="Email"
 value={email}
 onChange={(e) => setEmail(e.target.value)}
 />
+
 <input
 type="password"
 className="w-full border rounded-lg px-3 py-2 mb-3"
@@ -51,13 +65,19 @@ value={password}
 onChange={(e) => setPassword(e.target.value)}
 />
 
-<button onClick={submit} className="w-full bg-blue-600 text-white py-2 rounded-lg">
+<button
+onClick={submit}
+className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+>
 {isSignUp ? "Create account" : "Sign in"}
 </button>
 
 <button
+onClick={() => {
+setIsSignUp(!isSignUp);
+setMsg("");
+}}
 className="w-full mt-3 text-sm text-blue-600"
-onClick={() => setIsSignUp(!isSignUp)}
 >
 {isSignUp ? "Already have account? Sign in" : "Need account? Sign up"}
 </button>
