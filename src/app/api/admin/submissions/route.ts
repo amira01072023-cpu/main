@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase-server";
+import { getResendClient } from "@/lib/mailer";
 
 const ALLOWED_ADMIN_EMAIL = "amira.01072023@gmail.com";
 
@@ -113,6 +114,33 @@ reviewed_at: new Date().toISOString(),
 .eq("id", id);
 
 if (updErr) return NextResponse.json({ error: updErr.message }, { status: 500 });
+
+// Notify submitter email (optional if RESEND_API_KEY not set)
+const resend = getResendClient();
+
+if (resend && submission.email) {
+await resend.emails.send({
+from: "UAE Biz Connect <onboarding@resend.dev>",
+to: submission.email,
+subject:
+newStatus === "approved"
+? `Approved: ${submission.business_name}`
+: `Update on your listing: ${submission.business_name}`,
+html:
+newStatus === "approved"
+? `
+<p>Hello,</p>
+<p>Your listing <b>${submission.business_name}</b> has been <b>approved</b> and published on UAE Biz Connect.</p>
+<p>Thank you.</p>
+`
+: `
+<p>Hello,</p>
+<p>Your listing <b>${submission.business_name}</b> was <b>not approved</b> at this time.</p>
+<p><b>Reason:</b> ${review_note}</p>
+<p>Please update details and submit again.</p>
+`,
+});
+}
 
 return NextResponse.json({
 success: true,

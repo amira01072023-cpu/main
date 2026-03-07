@@ -32,6 +32,11 @@ setReady(true);
 })();
 }, [supabase]);
 
+const signOut = async () => {
+await supabase.auth.signOut();
+window.location.href = "/auth";
+};
+
 const setField = (k: string, v: string) =>
 setForm((p) => ({ ...p, [k]: v }));
 
@@ -98,7 +103,15 @@ return <main className="p-8">Checking session...</main>;
 return (
 <main className="min-h-screen bg-[#f8fafc] p-6">
 <div className="max-w-2xl mx-auto bg-white border rounded-xl p-6 mt-8">
-<h1 className="text-2xl font-bold mb-4">List Your Business</h1>
+<div className="flex items-center justify-between mb-4">
+<h1 className="text-2xl font-bold">List Your Business</h1>
+<button
+onClick={signOut}
+className="text-sm border border-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-50"
+>
+Sign out
+</button>
+</div>
 
 <form onSubmit={submit} className="space-y-3">
 <input
