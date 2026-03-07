@@ -130,7 +130,12 @@ return (
 <Megaphone className="text-blue-600" size={20} />
 <span className="font-bold text-lg tracking-tight">UAE Biz Connect</span>
 </div>
-<button className="bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700">List Your Business</button>
+<Link
+href="/list-your-business"
+className="bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700"
+>
+List Your Business
+</Link>
 </div>
 </header>
 

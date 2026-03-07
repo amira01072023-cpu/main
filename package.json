@@ -10,6 +10,7 @@
     "scrape": "node scripts/scraper/run.js"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.9.0",
     "@supabase/supabase-js": "^2.98.0",
     "csv-parse": "^6.1.0",
     "lucide-react": "^0.576.0",

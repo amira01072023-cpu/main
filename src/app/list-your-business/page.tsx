@@ -1,0 +1,175 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase-browser";
+
+export default function ListYourBusinessPage() {
+const supabase = createClient();
+const [ready, setReady] = useState(false);
+
+const [form, setForm] = useState({
+business_name: "",
+category: "",
+city: "",
+phone: "",
+email: "",
+website_url: "",
+address: "",
+services: "",
+});
+
+const [msg, setMsg] = useState("");
+const [submitting, setSubmitting] = useState(false);
+
+useEffect(() => {
+(async () => {
+const { data } = await supabase.auth.getUser();
+if (!data.user) {
+window.location.href = "/auth";
+} else {
+setReady(true);
+}
+})();
+}, [supabase]);
+
+const setField = (k: string, v: string) =>
+setForm((p) => ({ ...p, [k]: v }));
+
+const submit = async (e: React.FormEvent) => {
+e.preventDefault();
+setMsg("");
+
+if (
+!form.business_name.trim() ||
+!form.category.trim() ||
+!form.city.trim() ||
+!form.phone.trim() ||
+!form.email.trim() ||
+!form.website_url.trim() ||
+!form.address.trim() ||
+!form.services.trim()
+) {
+return setMsg("All fields are required.");
+}
+
+setSubmitting(true);
+
+try {
+const res = await fetch("/api/business-submissions", {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify(form),
+});
+
+const data = await res.json();
+
+if (!res.ok) {
+setMsg(data.error || "Failed to submit");
+return;
+}
+
+setMsg("✅ Submitted successfully. Status: Pending admin approval.");
+
+setForm({
+business_name: "",
+category: "",
+city: "",
+phone: "",
+email: "",
+website_url: "",
+address: "",
+services: "",
+});
+
+setTimeout(() => {
+window.location.href = "/";
+}, 1500);
+} catch {
+setMsg("Something went wrong. Please try again.");
+} finally {
+setSubmitting(false);
+}
+};
+
+if (!ready) {
+return <main className="p-8">Checking session...</main>;
+}
+
+return (
+<main className="min-h-screen bg-[#f8fafc] p-6">
+<div className="max-w-2xl mx-auto bg-white border rounded-xl p-6 mt-8">
+<h1 className="text-2xl font-bold mb-4">List Your Business</h1>
+
+<form onSubmit={submit} className="space-y-3">
+<input
+className="w-full border rounded-lg px-3 py-2"
+placeholder="Business Name *"
+value={form.business_name}
+onChange={(e) => setField("business_name", e.target.value)}
+required
+/>
+<input
+className="w-full border rounded-lg px-3 py-2"
+placeholder="Category *"
+value={form.category}
+onChange={(e) => setField("category", e.target.value)}
+required
+/>
+<input
+className="w-full border rounded-lg px-3 py-2"
+placeholder="City *"
+value={form.city}
+onChange={(e) => setField("city", e.target.value)}
+required
+/>
+<input
+className="w-full border rounded-lg px-3 py-2"
+placeholder="Phone *"
+value={form.phone}
+onChange={(e) => setField("phone", e.target.value)}
+required
+/>
+<input
+type="email"
+className="w-full border rounded-lg px-3 py-2"
+placeholder="Email *"
+value={form.email}
+onChange={(e) => setField("email", e.target.value)}
+required
+/>
+<input
+type="url"
+className="w-full border rounded-lg px-3 py-2"
+placeholder="Website URL *"
+value={form.website_url}
+onChange={(e) => setField("website_url", e.target.value)}
+required
+/>
+<input
+className="w-full border rounded-lg px-3 py-2"
+placeholder="Address *"
+value={form.address}
+onChange={(e) => setField("address", e.target.value)}
+required
+/>
+<textarea
+className="w-full border rounded-lg px-3 py-2 min-h-[100px]"
+placeholder="Services *"
+value={form.services}
+onChange={(e) => setField("services", e.target.value)}
+required
+/>
+
+<button
+disabled={submitting}
+className="bg-blue-600 text-white px-5 py-2 rounded-lg disabled:opacity-60"
+>
+{submitting ? "Submitting..." : "Submit"}
+</button>
+</form>
+
+{msg && <p className="mt-4 text-sm">{msg}</p>}
+</div>
+</main>
+);
+}
