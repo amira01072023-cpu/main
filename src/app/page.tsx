@@ -84,11 +84,9 @@ const loadFilters = async () => {
 try {
 const res = await fetch("/api/listings/filters", { cache: "no-store" });
 const data: FiltersResponse | { error: string } = await res.json();
-
 if (!res.ok || "error" in data) {
 throw new Error("error" in data ? data.error : "Failed to load filters");
 }
-
 setCategoryOptions(data.categories ?? []);
 setCityOptions(data.cities ?? []);
 } catch {
@@ -101,9 +99,7 @@ const loadPopularCategories = async () => {
 try {
 const res = await fetch("/api/listings/popular-categories", { cache: "no-store" });
 const data = await res.json();
-if (res.ok) {
-setPopularCategories(data.categories || []);
-}
+if (res.ok) setPopularCategories(data.categories || []);
 } catch {
 setPopularCategories([]);
 }
@@ -120,28 +116,18 @@ await loadListings({ q, category, city, page: 1 });
 liveSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
-const onPrev = () => {
-if (page > 1) {
-void loadListings({ q, category, city, page: page - 1 });
-}
-};
-
-const onNext = () => {
-if (page < totalPages) {
-void loadListings({ q, category, city, page: page + 1 });
-}
-};
+const onPrev = () => page > 1 && loadListings({ q, category, city, page: page - 1 });
+const onNext = () => page < totalPages && loadListings({ q, category, city, page: page + 1 });
 
 const onSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLSelectElement>) => {
 if (e.key === "Enter") {
 e.preventDefault();
-void onSearch();
+onSearch();
 }
 };
 
 return (
 <main className="min-h-screen bg-[#f8fafc] text-slate-800 antialiased">
-{/* Top Bar */}
 <header className="bg-white/95 backdrop-blur border-b border-slate-200 sticky top-0 z-30">
 <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
 <div className="flex items-center gap-2">
@@ -157,12 +143,10 @@ List Your Business
 </div>
 </header>
 
-{/* Hero */}
 <section className="hero-wrap relative overflow-hidden bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 text-white">
 <div className="absolute inset-0 opacity-25 bg-[radial-gradient(circle_at_20%_20%,#ffffff_0%,transparent_35%),radial-gradient(circle_at_80%_0%,#ffffff_0%,transparent_30%)]" />
 <div className="hero-flag-accent" aria-hidden="true" />
 
-{/* UAE micro art */}
 <div className="uae-hero-art" aria-hidden="true">
 <svg className="uae-art burj" viewBox="0 0 120 260">
 <path
@@ -191,6 +175,8 @@ strokeLinecap="round"
 <path d="M20 115 H240" fill="none" stroke="currentColor" strokeWidth="2.2" />
 <path d="M80 115 Q130 38 180 115" fill="none" stroke="currentColor" strokeWidth="2.2" />
 <path d="M56 115 V60 M204 115 V60" fill="none" stroke="currentColor" strokeWidth="2.2" />
+<path d="M56 60 L61 50 L56 40 L51 50 Z" fill="none" stroke="currentColor" strokeWidth="1.8" />
+<path d="M204 60 L209 50 L204 40 L199 50 Z" fill="none" stroke="currentColor" strokeWidth="1.8" />
 </svg>
 
 <svg className="uae-art dunes" viewBox="0 0 320 120">
@@ -199,7 +185,7 @@ strokeLinecap="round"
 </svg>
 
 <svg className="uae-art sparkle s1" viewBox="0 0 24 24">
-<path d="M12 2v20M2 12h20" fill="none" stroke="currentColor" strokeWidth="1.8" />
+<path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19" fill="none" stroke="currentColor" strokeWidth="1.8" />
 </svg>
 <svg className="uae-art sparkle s2" viewBox="0 0 24 24">
 <path d="M12 2v20M2 12h20" fill="none" stroke="currentColor" strokeWidth="1.8" />
@@ -278,7 +264,6 @@ Search Now
 </div>
 </section>
 
-{/* Stats strip */}
 <section className="max-w-6xl mx-auto px-4 -mt-8 relative z-10">
 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
 <div className="bg-white border rounded-xl p-4 shadow-sm">
@@ -300,7 +285,6 @@ Search Now
 </div>
 </section>
 
-{/* Live Listings */}
 <section ref={liveSectionRef} className="max-w-6xl mx-auto px-4 py-12">
 <div className="flex items-end justify-between mb-5">
 <h2 className="text-2xl font-bold">Live Listings</h2>
@@ -309,9 +293,7 @@ Search Now
 
 {loading && <p className="text-slate-500">Loading listings...</p>}
 {error && <p className="text-red-600">Error: {error}</p>}
-{!loading && !error && listings.length === 0 && (
-<p className="text-slate-500">No listings found for this search.</p>
-)}
+{!loading && !error && listings.length === 0 && <p className="text-slate-500">No listings found for this search.</p>}
 
 {!loading && !error && listings.length > 0 && (
 <>
@@ -319,7 +301,7 @@ Search Now
 {listings.map((item) => (
 <article
 key={item.id}
-className="bg-white rounded-2xl border border-slate-200/80 p-5 hover:shadow-xl hover:-translate-y-1 transition duration-300"
+className="group bg-white rounded-2xl border border-slate-200/80 p-5 transition-all duration-300 ease-out hover:shadow-xl hover:-translate-y-1 hover:border-blue-200"
 >
 <h3 className="text-lg font-bold">{item.business_name}</h3>
 <p className="inline-block mt-1 text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-full">
@@ -342,7 +324,7 @@ className="bg-white rounded-2xl border border-slate-200/80 p-5 hover:shadow-xl h
 <div className="mt-4 flex flex-wrap gap-2">
 <Link
 href={`/listing/${item.id}`}
-className="border border-slate-300 px-4 py-2 rounded-lg text-sm hover:bg-slate-50"
+className="inline-flex items-center border border-slate-300 px-4 py-2 rounded-lg text-sm hover:bg-slate-50 hover:border-slate-400 transition-colors"
 >
 View Details
 </Link>
@@ -367,9 +349,7 @@ No Website
 </div>
 
 <div className="mt-6 flex items-center justify-between">
-<p className="text-sm text-slate-500">
-Page {page} of {totalPages}
-</p>
+<p className="text-sm text-slate-500">Page {page} of {totalPages}</p>
 <div className="flex gap-2">
 <button
 onClick={onPrev}
@@ -391,7 +371,6 @@ Next
 )}
 </section>
 
-{/* Popular Categories */}
 <section className="max-w-6xl mx-auto px-4 pb-12">
 <div className="flex items-end justify-between mb-5">
 <h2 className="text-2xl font-bold">Popular Categories</h2>
@@ -399,10 +378,7 @@ Next
 
 <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
 {popularCategories.map((cat) => (
-<div
-key={cat.name}
-className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-md transition"
->
+<div key={cat.name} className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-md transition">
 <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center mb-3">
 <Building2 size={18} />
 </div>
@@ -413,7 +389,6 @@ className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-md trans
 </div>
 </section>
 
-{/* Footer */}
 <footer className="bg-slate-950 text-slate-300">
 <section className="max-w-6xl mx-auto px-4 pb-12">
 <h2 className="text-2xl font-bold mb-4">Browse by Category</h2>
@@ -429,42 +404,25 @@ className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-md trans
 <Link
 key={c.slug}
 href={`/category/${c.slug}`}
-className="bg-white border border-slate-300 px-4 py-2 rounded-lg text-sm hover:bg-slate-50"
+className="bg-white border border-slate-300 px-4 py-2 rounded-lg text-sm hover:bg-slate-50 text-slate-900"
 >
 {c.label}
 </Link>
 ))}
 </div>
 </section>
-
 <div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-8">
 <div>
 <h3 className="text-white font-bold mb-3">UAE Biz Connect</h3>
-<p className="text-sm text-slate-400">
-Your trusted local business directory for all Emirates.
-</p>
+<p className="text-sm text-slate-400">Your trusted local business directory for all Emirates.</p>
 </div>
 <div>
 <h4 className="text-white font-semibold mb-3">Support</h4>
 <ul className="space-y-1 text-sm text-slate-400">
-<li>
-<a className="hover:text-white" href="mailto:info@uaebizconnect.com">
-Contact Us
-</a>
-</li>
-<li>
-<Link className="hover:text-white" href="/privacy-policy">
-Privacy Policy
-</Link>
-</li>
-<li>
-<Link className="hover:text-white" href="/terms-of-use">
-Terms of Use
-</Link>
-</li>
-<li className="text-slate-500 text-xs mt-2">
-Business submissions are reviewed before publishing.
-</li>
+<li><a className="hover:text-white" href="mailto:info@uaebizconnect.com">Contact Us</a></li>
+<li><Link className="hover:text-white" href="/privacy-policy">Privacy Policy</Link></li>
+<li><Link className="hover:text-white" href="/terms-of-use">Terms of Use</Link></li>
+<li className="text-slate-500 text-xs mt-2">Business submissions are reviewed before publishing.</li>
 </ul>
 </div>
 </div>
