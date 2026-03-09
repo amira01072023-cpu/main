@@ -73,8 +73,8 @@ setListings(data.items ?? []);
 setPage(data.page ?? 1);
 setTotalPages(data.totalPages ?? 1);
 setTotal(data.total ?? 0);
-} catch (e: any) {
-setError(e.message || "Something went wrong");
+} catch (e: unknown) {
+setError(e instanceof Error ? e.message : "Something went wrong");
 } finally {
 setLoading(false);
 }
@@ -84,9 +84,11 @@ const loadFilters = async () => {
 try {
 const res = await fetch("/api/listings/filters", { cache: "no-store" });
 const data: FiltersResponse | { error: string } = await res.json();
+
 if (!res.ok || "error" in data) {
 throw new Error("error" in data ? data.error : "Failed to load filters");
 }
+
 setCategoryOptions(data.categories ?? []);
 setCityOptions(data.cities ?? []);
 } catch {
@@ -99,7 +101,9 @@ const loadPopularCategories = async () => {
 try {
 const res = await fetch("/api/listings/popular-categories", { cache: "no-store" });
 const data = await res.json();
-if (res.ok) setPopularCategories(data.categories || []);
+if (res.ok) {
+setPopularCategories(data.categories || []);
+}
 } catch {
 setPopularCategories([]);
 }
@@ -116,13 +120,22 @@ await loadListings({ q, category, city, page: 1 });
 liveSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
-const onPrev = () => page > 1 && loadListings({ q, category, city, page: page - 1 });
-const onNext = () => page < totalPages && loadListings({ q, category, city, page: page + 1 });
+const onPrev = () => {
+if (page > 1) {
+void loadListings({ q, category, city, page: page - 1 });
+}
+};
+
+const onNext = () => {
+if (page < totalPages) {
+void loadListings({ q, category, city, page: page + 1 });
+}
+};
 
 const onSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLSelectElement>) => {
 if (e.key === "Enter") {
 e.preventDefault();
-onSearch();
+void onSearch();
 }
 };
 
@@ -145,14 +158,60 @@ List Your Business
 </header>
 
 {/* Hero */}
-<section className="relative overflow-hidden bg-gradient-to-r from-blue-800 via-blue-700 to-blue-500 text-white">
-<div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_20%_20%,#ffffff_0%,transparent_35%),radial-gradient(circle_at_80%_0%,#ffffff_0%,transparent_30%)]" />
-<div className="relative max-w-6xl mx-auto px-4 py-16 md:py-20">
+<section className="hero-wrap relative overflow-hidden bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 text-white">
+<div className="absolute inset-0 opacity-25 bg-[radial-gradient(circle_at_20%_20%,#ffffff_0%,transparent_35%),radial-gradient(circle_at_80%_0%,#ffffff_0%,transparent_30%)]" />
+<div className="hero-flag-accent" aria-hidden="true" />
+
+{/* UAE micro art */}
+<div className="uae-hero-art" aria-hidden="true">
+<svg className="uae-art burj" viewBox="0 0 120 260">
+<path
+d="M60 8 L68 52 L63 52 L72 104 L64 104 L74 154 L61 154 L69 230 L55 230 L60 8"
+fill="none"
+stroke="currentColor"
+strokeWidth="2.2"
+strokeLinecap="round"
+/>
+<circle cx="60" cy="8" r="2.5" fill="currentColor" />
+</svg>
+
+<svg className="uae-art sail" viewBox="0 0 180 220">
+<path
+d="M40 200 C55 130, 65 70, 120 24 C125 70, 132 125, 145 200"
+fill="none"
+stroke="currentColor"
+strokeWidth="2.2"
+strokeLinecap="round"
+/>
+<path d="M40 200 H150" fill="none" stroke="currentColor" strokeWidth="2.2" />
+<path d="M110 62 C98 72, 96 96, 112 110" fill="none" stroke="currentColor" strokeWidth="2" />
+</svg>
+
+<svg className="uae-art mosque" viewBox="0 0 260 140">
+<path d="M20 115 H240" fill="none" stroke="currentColor" strokeWidth="2.2" />
+<path d="M80 115 Q130 38 180 115" fill="none" stroke="currentColor" strokeWidth="2.2" />
+<path d="M56 115 V60 M204 115 V60" fill="none" stroke="currentColor" strokeWidth="2.2" />
+</svg>
+
+<svg className="uae-art dunes" viewBox="0 0 320 120">
+<path d="M0 90 Q45 60 90 82 T180 82 T270 78 T320 88" fill="none" stroke="currentColor" strokeWidth="2.2" />
+<path d="M0 105 Q55 78 110 98 T220 96 T320 104" fill="none" stroke="currentColor" strokeWidth="2" />
+</svg>
+
+<svg className="uae-art sparkle s1" viewBox="0 0 24 24">
+<path d="M12 2v20M2 12h20" fill="none" stroke="currentColor" strokeWidth="1.8" />
+</svg>
+<svg className="uae-art sparkle s2" viewBox="0 0 24 24">
+<path d="M12 2v20M2 12h20" fill="none" stroke="currentColor" strokeWidth="1.8" />
+</svg>
+</div>
+
+<div className="hero-content relative max-w-6xl mx-auto px-4 py-16 md:py-20">
 <h1 className="text-3xl md:text-5xl font-extrabold leading-tight max-w-3xl">
 Find Local Businesses, Services & Contacts Across the UAE
 </h1>
 <p className="mt-4 text-blue-100 max-w-2xl">
-Search by business name, category, or city. Discover trusted listings quickly.
+Search by business name, category, or emirate. Discover trusted listings quickly.
 </p>
 
 <div className="mt-5 flex flex-wrap gap-2 text-xs md:text-sm">
@@ -199,7 +258,7 @@ onChange={(e) => setCity(e.target.value)}
 onKeyDown={onSearchKeyDown}
 className="w-full outline-none text-slate-700 bg-transparent"
 >
-<option value="">All Cities</option>
+<option value="">All Emirates</option>
 {cityOptions.map((c) => (
 <option key={c} value={c}>
 {c}
@@ -227,7 +286,7 @@ Search Now
 <p className="text-xl font-bold">{total}</p>
 </div>
 <div className="bg-white border rounded-xl p-4 shadow-sm">
-<p className="text-xs text-slate-500">Cities Covered</p>
+<p className="text-xs text-slate-500">Emirates Covered</p>
 <p className="text-xl font-bold">{cityOptions.length}</p>
 </div>
 <div className="bg-white border rounded-xl p-4 shadow-sm">
@@ -377,6 +436,7 @@ className="bg-white border border-slate-300 px-4 py-2 rounded-lg text-sm hover:b
 ))}
 </div>
 </section>
+
 <div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-8">
 <div>
 <h3 className="text-white font-bold mb-3">UAE Biz Connect</h3>

@@ -1,26 +1,167 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+--background: #ffffff;
+--foreground: #171717;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+--color-background: var(--background);
+--color-foreground: var(--foreground);
+--font-sans: var(--font-geist-sans);
+--font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+--background: #0a0a0a;
+--foreground: #ededed;
+}
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+background: var(--background);
+color: var(--foreground);
+font-family: Arial, Helvetica, sans-serif;
+}
+
+.hero-wrap {
+position: relative;
+overflow: hidden;
+isolation: isolate;
+min-height: 340px;
+}
+
+.hero-content {
+position: relative;
+z-index: 2;
+}
+
+/* very slim UAE accent strip */
+.hero-flag-accent {
+position: absolute;
+inset: 0 auto 0 0;
+width: 5px;
+background: linear-gradient(
+to bottom,
+#ef4444 0%,
+#ef4444 25%,
+#ffffff 25%,
+#ffffff 50%,
+#16a34a 50%,
+#16a34a 75%,
+#111827 75%,
+#111827 100%
+);
+opacity: 0.2;
+z-index: 1;
+}
+
+.uae-hero-art {
+position: absolute;
+inset: 0;
+pointer-events: none;
+z-index: 0;
+overflow: hidden;
+}
+
+.uae-art {
+position: absolute;
+color: #ffffff;
+opacity: 0.06; /* micro visibility */
+filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.12));
+}
+
+/* MICRO sizes */
+.uae-art.burj {
+right: 8%;
+top: 14%;
+width: 28px;
+height: auto;
+animation: floatY 8s ease-in-out infinite;
+}
+
+.uae-art.sail {
+right: 16%;
+top: 38%;
+width: 42px;
+height: auto;
+animation: floatY 10s ease-in-out infinite reverse;
+}
+
+.uae-art.mosque {
+left: 7%;
+bottom: 21%;
+width: 72px;
+height: auto;
+animation: floatY 9s ease-in-out infinite;
+}
+
+.uae-art.dunes {
+left: 0;
+right: 0;
+bottom: 2%;
+width: 100%;
+height: auto;
+opacity: 0.05;
+transform: scale(0.92);
+transform-origin: bottom center;
+}
+
+.uae-art.sparkle {
+width: 6px;
+height: 6px;
+opacity: 0.1;
+animation: twinkle 3s ease-in-out infinite;
+}
+.uae-art.sparkle.s1 {
+left: 41%;
+top: 26%;
+}
+.uae-art.sparkle.s2 {
+left: 59%;
+top: 22%;
+animation-delay: 1.4s;
+}
+
+@keyframes floatY {
+0%, 100% { transform: translateY(0); }
+50% { transform: translateY(-2px); }
+}
+
+@keyframes twinkle {
+0%, 100% { opacity: 0.07; transform: scale(1); }
+50% { opacity: 0.14; transform: scale(1.03); }
+}
+
+/* Mobile even more subtle */
+@media (max-width: 900px) {
+.hero-wrap { min-height: 310px; }
+.hero-flag-accent { width: 4px; opacity: 0.16; }
+
+.uae-art { opacity: 0.05; }
+
+.uae-art.burj {
+width: 22px;
+right: 6%;
+top: 16%;
+}
+
+.uae-art.sail {
+width: 34px;
+right: 12%;
+top: 40%;
+}
+
+.uae-art.mosque {
+width: 56px;
+left: 5%;
+bottom: 18%;
+}
+
+.uae-art.sparkle {
+width: 5px;
+height: 5px;
+opacity: 0.08;
+}
 }
