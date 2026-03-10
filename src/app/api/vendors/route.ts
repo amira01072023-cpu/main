@@ -11,7 +11,6 @@ return null;
 }
 
 function getRefFromJwtLikeKey(key: string) {
-// Only works for JWT-style keys (eyJ...)
 try {
 if (!key.startsWith("eyJ")) return null;
 const parts = key.split(".");
@@ -26,7 +25,7 @@ return null;
 export async function GET(req: NextRequest) {
 try {
 const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || "").trim();
-const serviceKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "").trim(); // temp
+const serviceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || "").trim();
 
 if (!supabaseUrl || !serviceKey) {
 return NextResponse.json(
@@ -35,16 +34,13 @@ return NextResponse.json(
 );
 }
 
-// Optional mismatch check for JWT-style keys
+// Optional safety check (works for JWT-style keys)
 const urlRef = getProjectRefFromUrl(supabaseUrl);
 const keyRef = getRefFromJwtLikeKey(serviceKey);
+
 if (urlRef && keyRef && urlRef !== keyRef) {
 return NextResponse.json(
-{
-error: "Supabase key/project mismatch",
-urlRef,
-keyRef,
-},
+{ error: "Supabase key/project mismatch", urlRef, keyRef },
 { status: 500 }
 );
 }
