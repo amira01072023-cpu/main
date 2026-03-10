@@ -134,12 +134,20 @@ return (
 <Megaphone className="text-blue-600" size={20} />
 <span className="font-bold text-lg tracking-tight">UAE Biz Connect</span>
 </div>
+<div className="flex items-center gap-2">
+<Link
+href="/vendors"
+className="bg-white text-blue-700 border border-blue-200 text-sm px-4 py-2 rounded-lg hover:bg-blue-50 transition"
+>
+Vendors
+</Link>
 <Link
 href="/list-your-business"
 className="bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition"
 >
 List Your Business
 </Link>
+</div>
 </div>
 </header>
 
@@ -389,44 +397,26 @@ Next
 </div>
 </section>
 
-<footer className="bg-slate-950 text-slate-300">
-<section className="max-w-6xl mx-auto px-4 pb-12">
-<h2 className="text-2xl font-bold mb-4">Browse by Category</h2>
-<div className="flex flex-wrap gap-2">
-{[
-{ label: "HVAC", slug: "hvac" },
-{ label: "Building Maintenance", slug: "building-maintenance" },
-{ label: "Electrical", slug: "electrical" },
-{ label: "Plumbing", slug: "plumbing" },
-{ label: "General Services", slug: "general-services" },
-{ label: "Directory", slug: "directory" },
-].map((c) => (
-<Link
-key={c.slug}
-href={`/category/${c.slug}`}
-className="bg-white border border-slate-300 px-4 py-2 rounded-lg text-sm hover:bg-slate-50 text-slate-900"
->
-{c.label}
-</Link>
-))}
-</div>
-</section>
-<div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-8">
+<footer className="footer-image-bg relative overflow-hidden text-slate-300">
+<div className="footer-overlay" />
+
+<div className="relative z-10 max-w-6xl mx-auto px-4 py-16 grid md:grid-cols-3 gap-8">
 <div>
 <h3 className="text-white font-bold mb-3">UAE Biz Connect</h3>
-<p className="text-sm text-slate-400">Your trusted local business directory for all Emirates.</p>
+<p className="text-sm text-slate-200">Your trusted local business directory for all Emirates.</p>
 </div>
+
 <div>
 <h4 className="text-white font-semibold mb-3">Support</h4>
-<ul className="space-y-1 text-sm text-slate-400">
+<ul className="space-y-1 text-sm text-slate-200">
 <li><a className="hover:text-white" href="mailto:info@uaebizconnect.com">Contact Us</a></li>
 <li><Link className="hover:text-white" href="/privacy-policy">Privacy Policy</Link></li>
 <li><Link className="hover:text-white" href="/terms-of-use">Terms of Use</Link></li>
-<li className="text-slate-500 text-xs mt-2">Business submissions are reviewed before publishing.</li>
 </ul>
 </div>
 </div>
 </footer>
+<footer style={{ backgroundImage: 'url("/footer-bg.jpg")', backgroundSize: "cover", backgroundPosition: "center" }}></footer>
 </main>
 );
 }

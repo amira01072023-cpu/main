@@ -40,7 +40,7 @@ return setMsg("Account created. Check your email if confirmation is enabled.");
 const { error } = await supabase.auth.signInWithPassword({ email, password });
 if (error) return setMsg(error.message);
 
-window.location.href = "/vendors";
+window.location.href = "/list-your-business";
 };
 
 return (
