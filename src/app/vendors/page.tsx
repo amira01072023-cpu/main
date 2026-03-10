@@ -1,10 +1,9 @@
+// src/app/vendors/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Search, Building2, Globe, Home } from "lucide-react";
-import { createClient } from "@supabase/supabase-js";
 
 type Vendor = {
 id: number;
@@ -21,14 +20,7 @@ total: number;
 totalPages: number;
 };
 
-const supabase = createClient(
-process.env.NEXT_PUBLIC_SUPABASE_URL!,
-process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
 export default function VendorsPage() {
-const router = useRouter();
-
 const [q, setQ] = useState("");
 const [vendors, setVendors] = useState<Vendor[]>([]);
 const [loading, setLoading] = useState(true);
@@ -36,7 +28,6 @@ const [error, setError] = useState("");
 const [page, setPage] = useState(1);
 const [totalPages, setTotalPages] = useState(1);
 const [total, setTotal] = useState(0);
-
 
 const loadVendors = async (params?: { q?: string; page?: number }) => {
 try {
@@ -67,7 +58,6 @@ setLoading(false);
 };
 
 useEffect(() => {
-
 loadVendors({ page: 1 });
 }, []);
 

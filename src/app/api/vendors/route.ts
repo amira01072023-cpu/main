@@ -1,3 +1,4 @@
+// src/app/api/vendors/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
@@ -8,11 +9,7 @@ const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !serviceKey) {
 return NextResponse.json(
-{
-error: "Server env missing",
-hasUrl: !!supabaseUrl,
-hasServiceKey: !!serviceKey,
-},
+{ error: "Server env missing: Supabase keys are not configured." },
 { status: 500 }
 );
 }
@@ -30,9 +27,14 @@ let query = supabase
 .from("vendors")
 .select("id, company_name, services, website_url", { count: "exact" });
 
-if (q) query = query.or(`company_name.ilike.%${q}%,services.ilike.%${q}%`);
+if (q) {
+query = query.or(`company_name.ilike.%${q}%,services.ilike.%${q}%`);
+}
 
-const { data, error, count } = await query.order("id", { ascending: false }).range(from, to);
+const { data, error, count } = await query
+.order("id", { ascending: false })
+.range(from, to);
+
 if (error) throw error;
 
 return NextResponse.json({
@@ -43,6 +45,9 @@ total: count ?? 0,
 totalPages: Math.max(1, Math.ceil((count ?? 0) / limit)),
 });
 } catch (e: any) {
-return NextResponse.json({ error: e.message || "Failed to load vendors" }, { status: 500 });
+return NextResponse.json(
+{ error: e.message || "Failed to load vendors" },
+{ status: 500 }
+);
 }
 }

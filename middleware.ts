@@ -1,3 +1,4 @@
+// middleware.ts (project root)
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
@@ -22,7 +23,9 @@ res.cookies.set({ name, value: "", ...options });
 }
 );
 
-const { data: { user } } = await supabase.auth.getUser();
+const {
+data: { user },
+} = await supabase.auth.getUser();
 
 if (!user) {
 const url = req.nextUrl.clone();

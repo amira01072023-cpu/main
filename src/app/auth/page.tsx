@@ -1,3 +1,4 @@
+// src/app/auth/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -36,11 +37,12 @@ return setMsg(error.message);
 return setMsg("Account created. Check your email if confirmation is enabled.");
 }
 
-// Sign in mode
 const { error } = await supabase.auth.signInWithPassword({ email, password });
 if (error) return setMsg(error.message);
 
-window.location.href = "/vendors";
+const params = new URLSearchParams(window.location.search);
+const next = params.get("redirectedFrom") || "/vendors";
+window.location.href = next;
 };
 
 return (
