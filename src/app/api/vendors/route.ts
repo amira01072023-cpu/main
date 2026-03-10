@@ -1,15 +1,50 @@
-// src/app/api/vendors/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
+function getProjectRefFromUrl(url: string) {
+try {
+const host = new URL(url).host; // e.g. lvyqayarwgdydrlqpanu.supabase.co
+return host.split(".")[0] || null;
+} catch {
+return null;
+}
+}
+
+function getRefFromJwtLikeKey(key: string) {
+// Only works for JWT-style keys (eyJ...)
+try {
+if (!key.startsWith("eyJ")) return null;
+const parts = key.split(".");
+if (parts.length < 2) return null;
+const payload = JSON.parse(Buffer.from(parts[1], "base64url").toString("utf8"));
+return payload?.ref ?? null;
+} catch {
+return null;
+}
+}
+
 export async function GET(req: NextRequest) {
 try {
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || "").trim();
+const serviceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || "").trim();
 
 if (!supabaseUrl || !serviceKey) {
 return NextResponse.json(
 { error: "Server env missing: Supabase keys are not configured." },
+{ status: 500 }
+);
+}
+
+// Optional mismatch check for JWT-style keys
+const urlRef = getProjectRefFromUrl(supabaseUrl);
+const keyRef = getRefFromJwtLikeKey(serviceKey);
+if (urlRef && keyRef && urlRef !== keyRef) {
+return NextResponse.json(
+{
+error: "Supabase key/project mismatch",
+urlRef,
+keyRef,
+},
 { status: 500 }
 );
 }
@@ -35,7 +70,12 @@ const { data, error, count } = await query
 .order("id", { ascending: false })
 .range(from, to);
 
-if (error) throw error;
+if (error) {
+return NextResponse.json(
+{ error: error.message, details: error },
+{ status: 500 }
+);
+}
 
 return NextResponse.json({
 items: data ?? [],
@@ -46,7 +86,7 @@ totalPages: Math.max(1, Math.ceil((count ?? 0) / limit)),
 });
 } catch (e: any) {
 return NextResponse.json(
-{ error: e.message || "Failed to load vendors" },
+{ error: e?.message || "Failed to load vendors" },
 { status: 500 }
 );
 }
