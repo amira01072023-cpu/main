@@ -8,7 +8,11 @@ const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !serviceKey) {
 return NextResponse.json(
-{ error: "Server env missing: Supabase keys are not configured." },
+{
+error: "Server env missing",
+hasUrl: !!supabaseUrl,
+hasServiceKey: !!serviceKey,
+},
 { status: 500 }
 );
 }
