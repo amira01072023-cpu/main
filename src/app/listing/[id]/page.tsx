@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
-import { MapPin, Phone, Mail, Globe, ShieldCheck } from "lucide-react";
+import { MapPin, Phone, Mail, Globe, ShieldCheck, Megaphone } from "lucide-react";
 
 type Listing = {
 id: number;
@@ -167,9 +167,12 @@ type="application/ld+json"
 dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
 />
 
-<header className="bg-white border-b border-slate-200">
-<div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-<Link href="/" className="font-bold text-lg">UAE Biz Connect</Link>
+<header className="bg-white/95 backdrop-blur border-b border-slate-200 sticky top-0 z-30">
+<div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+<div className="flex items-center gap-2">
+<Megaphone className="text-blue-600" size={20} />
+<span className="font-bold text-lg tracking-tight">UAE Biz Connect</span>
+</div>
 <Link href="/" className="text-sm text-blue-600 hover:underline">← Back to Home</Link>
 </div>
 </header>

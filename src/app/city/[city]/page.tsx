@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Megaphone } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 
 type Listing = {
@@ -76,9 +77,12 @@ const listings = await getCityListings(city);
 
 return (
 <main className="min-h-screen bg-[#f8fafc] text-slate-800">
-<header className="bg-white border-b border-slate-200">
-<div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-<Link href="/" className="font-bold text-lg">UAE Biz Connect</Link>
+<header className="bg-white/95 backdrop-blur border-b border-slate-200 sticky top-0 z-30">
+<div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+<div className="flex items-center gap-2">
+<Megaphone className="text-blue-600" size={20} />
+<span className="font-bold text-lg tracking-tight">UAE Biz Connect</span>
+</div>
 <Link href="/" className="text-sm text-blue-600 hover:underline">← Back to Home</Link>
 </div>
 </header>
