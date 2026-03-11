@@ -70,7 +70,13 @@ export default function PrivacyPolicyPage() {
         requests according to applicable law.
       </p>
 
-      <h2 className="mt-8 text-xl font-bold">8. Contact</h2>
+      <h2 className="mt-8 text-xl font-bold">8. AI Transparency</h2>
+      <p>
+        Where AI-assisted features are used, we provide appropriate disclosure and maintain human oversight for
+        moderation-sensitive decisions.
+      </p>
+
+      <h2 className="mt-8 text-xl font-bold">9. Contact</h2>
       <p>
         Privacy and data requests: {" "}
         <a className="text-blue-600 hover:underline" href="mailto:info@uaebizconnect.com">

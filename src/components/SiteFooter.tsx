@@ -35,6 +35,8 @@ export default function SiteFooter() {
             <li><Link className="hover:text-white" href="/terms-of-use">Terms of Use</Link></li>
             <li><Link className="hover:text-white" href="/accessibility-statement">Accessibility Statement</Link></li>
             <li><Link className="hover:text-white" href="/data-rights-request">Data Rights Request</Link></li>
+            <li><Link className="hover:text-white" href="/eu-compliance">EU Compliance Notice</Link></li>
+            <li><Link className="hover:text-white" href="/report-illegal-content">Report Illegal Content</Link></li>
           </ul>
 
           <div className="mt-4 flex flex-wrap gap-2">

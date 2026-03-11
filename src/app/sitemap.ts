@@ -10,6 +10,8 @@ const staticRoutes: MetadataRoute.Sitemap = [
 { url: `${baseUrl}/terms-of-use`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.3 },
 { url: `${baseUrl}/accessibility-statement`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.3 },
 { url: `${baseUrl}/data-rights-request`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.3 },
+{ url: `${baseUrl}/eu-compliance`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.4 },
+{ url: `${baseUrl}/report-illegal-content`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.4 },
 { url: `${baseUrl}/vendors`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
 { url: `${baseUrl}/list-your-business`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.6 },
 

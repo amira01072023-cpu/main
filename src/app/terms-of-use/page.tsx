@@ -41,22 +41,33 @@ export default function TermsOfUsePage() {
         sponsored placements at this stage.
       </p>
 
-      <h2 className="mt-8 text-xl font-bold">6. Email Communications</h2>
+      <h2 className="mt-8 text-xl font-bold">6. Consumer Protection and Fair UX</h2>
+      <p>
+        We do not intentionally use deceptive dark patterns. Users must be able to make informed choices,
+        including cookie and privacy choices, without hidden manipulation.
+      </p>
+
+      <h2 className="mt-8 text-xl font-bold">7. Reviews and Authenticity</h2>
+      <p>
+        Fake, misleading, or manipulated reviews are prohibited. Report suspicious content through our reporting channel.
+      </p>
+
+      <h2 className="mt-8 text-xl font-bold">8. Email Communications</h2>
       <p>
         If we send marketing emails in future, messages will include clear opt-out/unsubscribe options and required
         sender identification in line with applicable anti-spam laws.
       </p>
 
-      <h2 className="mt-8 text-xl font-bold">7. Limitation of Liability</h2>
+      <h2 className="mt-8 text-xl font-bold">9. Limitation of Liability</h2>
       <p>
         The Website is provided “as is” without warranties of uninterrupted availability. To the extent permitted by
         law, we are not liable for indirect or consequential losses.
       </p>
 
-      <h2 className="mt-8 text-xl font-bold">8. Governing Law</h2>
+      <h2 className="mt-8 text-xl font-bold">10. Governing Law</h2>
       <p>These Terms are governed by the laws of the <strong>United Arab Emirates</strong>.</p>
 
-      <h2 className="mt-8 text-xl font-bold">9. Contact</h2>
+      <h2 className="mt-8 text-xl font-bold">11. Contact</h2>
       <p>
         For legal questions: {" "}
         <a className="text-blue-600 hover:underline" href="mailto:info@uaebizconnect.com">
