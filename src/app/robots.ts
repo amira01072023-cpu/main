@@ -6,7 +6,7 @@ rules: [
 {
 userAgent: "*",
 allow: "/",
-disallow: ["/admin/", "/api/admin/"],
+disallow: ["/admin/", "/api/admin/", "/auth"],
 },
 ],
 sitemap: "https://uaebizconnect.com/sitemap.xml",
