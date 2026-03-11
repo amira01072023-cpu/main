@@ -10,17 +10,24 @@ function isAdmin(email?: string | null) {
   return normalize(email) === normalize(ALLOWED_ADMIN_EMAIL);
 }
 
-export async function GET() {
+async function requireAdmin() {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!isAdmin(user?.email)) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return { ok: false as const, response: NextResponse.json({ error: "Forbidden" }, { status: 403 }) };
   }
 
-  const { data, error } = await supabase
+  return { ok: true as const, supabase };
+}
+
+export async function GET() {
+  const admin = await requireAdmin();
+  if (!admin.ok) return admin.response;
+
+  const { data, error } = await admin.supabase
     .from("data_subject_requests")
     .select("*")
     .order("created_at", { ascending: false });
@@ -37,4 +44,37 @@ export async function GET() {
   }
 
   return NextResponse.json({ items: data ?? [] });
+}
+
+export async function POST(req: Request) {
+  const admin = await requireAdmin();
+  if (!admin.ok) return admin.response;
+
+  const body = await req.json();
+  const id = Number(body?.id);
+  const status = String(body?.status || "").trim();
+  const review_note = String(body?.review_note || "").trim();
+
+  const allowed = ["pending", "in_progress", "completed", "rejected"];
+  if (!id || !allowed.includes(status)) {
+    return NextResponse.json({ error: "Invalid request payload" }, { status: 400 });
+  }
+
+  if (status === "rejected" && !review_note) {
+    return NextResponse.json({ error: "Review note is required when rejecting." }, { status: 400 });
+  }
+
+  const { error } = await admin.supabase
+    .from("data_subject_requests")
+    .update({
+      status,
+      review_note: review_note || null,
+    })
+    .eq("id", id);
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ success: true, status });
 }
