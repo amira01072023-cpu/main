@@ -200,6 +200,15 @@ strokeLinecap="round"
 <svg className="uae-art sparkle s2" viewBox="0 0 24 24">
 <path d="M12 2v20M2 12h20" fill="none" stroke="currentColor" strokeWidth="1.8" />
 </svg>
+<svg className="uae-art sparkle s3" viewBox="0 0 24 24">
+<path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19" fill="none" stroke="currentColor" strokeWidth="1.6" />
+</svg>
+<svg className="uae-art arc a1" viewBox="0 0 240 120">
+<path d="M10 100 C70 30, 170 30, 230 100" fill="none" stroke="currentColor" strokeWidth="2" />
+</svg>
+<svg className="uae-art arc a2" viewBox="0 0 240 120">
+<path d="M10 98 C70 38, 170 38, 230 98" fill="none" stroke="currentColor" strokeWidth="1.8" />
+</svg>
 </div>
 
 <div className="hero-content relative max-w-6xl mx-auto px-4 py-16 md:py-20">
