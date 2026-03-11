@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase-server";
+import { createAdminClient } from "@/lib/supabase-admin";
 import { getResendClient } from "@/lib/mailer";
 
 const CONTACT_EMAIL = "info@uaebizconnect.com";
@@ -23,8 +23,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid request type." }, { status: 400 });
     }
 
-    const supabase = await createClient();
-    const { error: insertError } = await supabase.from("data_subject_requests").insert({
+    const adminDb = createAdminClient();
+    const { error: insertError } = await adminDb.from("data_subject_requests").insert({
       full_name: fullName,
       email,
       request_type: requestType,

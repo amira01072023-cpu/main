@@ -37,10 +37,10 @@ export default function AdminDashboardPage() {
 
       const sData: { error?: string; items?: Submission[] } = sRaw ? JSON.parse(sRaw) : {};
       const cData: { error?: string; items?: Claim[] } = cRaw ? JSON.parse(cRaw) : {};
-      const dData: { error?: string; items?: DataRequest[] } = dRaw ? JSON.parse(dRaw) : {};
+      const dData: { error?: string; details?: string; items?: DataRequest[] } = dRaw ? JSON.parse(dRaw) : {};
 
       if (!sRes.ok || !cRes.ok || !dRes.ok) {
-        setMsg(sData.error || cData.error || dData.error || "Failed to load admin data.");
+        setMsg(sData.error || cData.error || dData.error || dData.details || "Failed to load admin data.");
         return;
       }
 

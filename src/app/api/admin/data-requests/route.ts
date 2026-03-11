@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase-server";
+import { createAdminClient } from "@/lib/supabase-admin";
 
 const ALLOWED_ADMIN_EMAIL = "amira.01072023@gmail.com";
 
@@ -27,7 +28,8 @@ export async function GET() {
   const admin = await requireAdmin();
   if (!admin.ok) return admin.response;
 
-  const { data, error } = await admin.supabase
+  const adminDb = createAdminClient();
+  const { data, error } = await adminDb
     .from("data_subject_requests")
     .select("*")
     .order("created_at", { ascending: false });
@@ -64,7 +66,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Review note is required when rejecting." }, { status: 400 });
   }
 
-  const { error } = await admin.supabase
+  const adminDb = createAdminClient();
+  const { error } = await adminDb
     .from("data_subject_requests")
     .update({
       status,
