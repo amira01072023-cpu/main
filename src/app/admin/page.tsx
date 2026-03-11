@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { Megaphone, Home } from "lucide-react";
+import SiteFooter from "@/components/SiteFooter";
 import { createClient } from "@/lib/supabase-browser";
 
 type Submission = { id: number; business_name: string; status: string; created_at: string };
@@ -122,13 +124,33 @@ export default function AdminDashboardPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#f8fafc] p-6 text-slate-800">
+    <main className="min-h-screen bg-[#f8fafc] text-slate-800 antialiased">
+      <header className="bg-white/95 backdrop-blur border-b border-slate-200 sticky top-0 z-30">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Megaphone className="text-blue-600" size={20} />
+            <span className="font-bold text-lg tracking-tight">UAE Biz Connect</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 bg-white text-blue-700 border border-blue-200 text-sm px-4 py-2 rounded-lg hover:bg-blue-50 transition"
+            >
+              <Home size={16} />
+              Home
+            </Link>
+            <button onClick={signOut} className="text-sm border border-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-50">Sign out</button>
+          </div>
+        </div>
+      </header>
+
+      <section className="p-6">
       <div className="max-w-6xl mx-auto bg-white border rounded-xl p-6 mt-8">
         <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
           <h1 className="text-2xl font-bold">Admin Dashboard</h1>
           <div className="flex gap-2">
             <button onClick={load} className="text-sm border border-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-50">Refresh</button>
-            <button onClick={signOut} className="text-sm border border-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-50">Sign out</button>
           </div>
         </div>
 
@@ -225,6 +247,8 @@ export default function AdminDashboardPage() {
           </div>
         </section>
       </div>
+      </section>
+      <SiteFooter />
     </main>
   );
 }
