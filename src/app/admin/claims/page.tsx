@@ -151,6 +151,12 @@ className="text-sm border border-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate
 >
 Business Submissions
 </Link>
+<Link
+href="/admin/data-requests"
+className="text-sm border border-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-50"
+>
+Data Requests
+</Link>
 <button
 onClick={signOut}
 className="text-sm border border-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-50"

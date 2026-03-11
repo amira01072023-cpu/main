@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase-browser";
 
 type Submission = {
@@ -145,12 +146,20 @@ return (
 <div className="max-w-6xl mx-auto bg-white border rounded-xl p-6 mt-8">
 <div className="flex items-center justify-between mb-2">
 <h1 className="text-2xl font-bold">Admin Review - Business Submissions</h1>
+<div className="flex gap-2">
 <button
 onClick={signOut}
 className="text-sm border border-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-50"
 >
 Sign out
 </button>
+<Link
+href="/admin/data-requests"
+className="text-sm border border-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-50"
+>
+Data Requests
+</Link>
+</div>
 </div>
 
 <p className="text-sm text-slate-500 mb-4">

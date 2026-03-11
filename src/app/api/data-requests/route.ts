@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase-server";
 import { getResendClient } from "@/lib/mailer";
 
 const CONTACT_EMAIL = "info@uaebizconnect.com";
@@ -22,18 +23,27 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid request type." }, { status: 400 });
     }
 
+    const supabase = await createClient();
+    const { error: insertError } = await supabase.from("data_subject_requests").insert({
+      full_name: fullName,
+      email,
+      request_type: requestType,
+      details: details || null,
+    });
+
     const resend = getResendClient();
-    if (!resend) {
+    if (!resend && insertError) {
       return NextResponse.json(
         {
           error:
-            "Data request email service is not configured. Please email info@uaebizconnect.com directly.",
+            "Data request channels are not available. Configure Resend or create data_subject_requests table.",
         },
         { status: 503 }
       );
     }
 
-    await resend.emails.send({
+    if (resend) {
+      await resend.emails.send({
       from: "UAE Biz Connect <onboarding@resend.dev>",
       to: CONTACT_EMAIL,
       replyTo: email,
@@ -45,7 +55,8 @@ export async function POST(req: Request) {
         <p><b>Type:</b> ${requestType}</p>
         <p><b>Details:</b><br/>${details ? details.replace(/\n/g, "<br/>") : "(none provided)"}</p>
       `,
-    });
+      });
+    }
 
     return NextResponse.json({ success: true, message: "Request submitted." });
   } catch (e: unknown) {
