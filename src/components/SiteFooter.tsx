@@ -48,7 +48,7 @@ export default function SiteFooter() {
       <div className="relative z-10 border-t border-white/15">
         <div className="max-w-6xl mx-auto px-4 py-3 text-xs text-slate-300 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 UAE Biz Connect. All rights reserved.</p>
-          <p>Live directory · Built for UAE local discovery</p>
+          <p>Live directory · Built for UAE local discovery · Developed by Amir</p>
         </div>
       </div>
     </footer>
