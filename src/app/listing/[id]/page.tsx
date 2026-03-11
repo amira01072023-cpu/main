@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import { MapPin, Phone, Mail, Globe, ShieldCheck, Megaphone } from "lucide-react";
+import { getDetailedListingCompleteness } from "@/lib/listing-completeness";
 
 type Listing = {
 id: number;
@@ -118,6 +119,7 @@ const listing = await getListing(id);
 if (!listing) notFound();
 
 const related = await getRelatedListings(listing);
+const completeness = getDetailedListingCompleteness(listing);
 
 const localBusinessJsonLd = {
 "@context": "https://schema.org",
@@ -208,6 +210,13 @@ Public Listing
 </p>
 <p className="md:col-span-2"><strong>Address:</strong> {listing.address || "—"}</p>
 <p className="md:col-span-2"><strong>Services:</strong> {listing.services || "—"}</p>
+</div>
+
+<div className="mt-4">
+<p className="text-sm text-slate-600"><strong>Profile completeness:</strong> {completeness}%</p>
+<div className="mt-1 h-2 w-full max-w-md rounded-full bg-slate-200 overflow-hidden">
+<div className="h-full bg-blue-600" style={{ width: `${completeness}%` }} />
+</div>
 </div>
 
 <div className="mt-7 flex flex-wrap gap-2">

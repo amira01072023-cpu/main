@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase-browser";
+import { getDetailedListingCompleteness } from "@/lib/listing-completeness";
 
 type Submission = {
 id: number;
@@ -226,6 +227,7 @@ className="text-blue-600 hover:underline"
 </p>
 <p className="md:col-span-2"><strong>Address:</strong> {s.address || "—"}</p>
 <p className="md:col-span-2"><strong>Services:</strong> {s.services || "—"}</p>
+<p className="md:col-span-2"><strong>Profile completeness:</strong> {getDetailedListingCompleteness(s)}%</p>
 </div>
 
 {s.status === "pending" && (

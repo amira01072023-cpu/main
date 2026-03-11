@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import SiteFooter from "@/components/SiteFooter";
 import { Search, MapPin, Phone, Star, Building2, Megaphone } from "lucide-react";
+import { getBasicListingCompleteness } from "@/lib/listing-completeness";
 
 type Listing = {
 id: number;
@@ -337,6 +338,9 @@ className="group bg-white rounded-2xl border border-slate-200/80 p-5 transition-
 <p className="flex items-center gap-1">
 <Star size={15} className="text-amber-500 fill-amber-500" />
 <span>Verified public listing</span>
+</p>
+<p className="text-xs text-slate-500">
+Profile completeness: {getBasicListingCompleteness(item)}%
 </p>
 </div>
 
