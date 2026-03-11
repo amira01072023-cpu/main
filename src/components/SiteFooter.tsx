@@ -33,6 +33,7 @@ export default function SiteFooter() {
             <li><a className="hover:text-white" href="mailto:info@uaebizconnect.com">Contact Us</a></li>
             <li><Link className="hover:text-white" href="/privacy-policy">Privacy Policy</Link></li>
             <li><Link className="hover:text-white" href="/terms-of-use">Terms of Use</Link></li>
+            <li><Link className="hover:text-white" href="/accessibility-statement">Accessibility Statement</Link></li>
           </ul>
 
           <div className="mt-4 flex flex-wrap gap-2">

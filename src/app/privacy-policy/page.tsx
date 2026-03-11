@@ -2,50 +2,77 @@ import type { Metadata } from "next";
 import LegalLayout from "@/components/LegalLayout";
 
 export const metadata: Metadata = {
-title: "Privacy Policy | UAE Biz Connect",
-description: "Privacy Policy for UAE Biz Connect.",
+  title: "Privacy Policy | UAE Biz Connect",
+  description: "Privacy Policy for UAE Biz Connect.",
 };
 
 export default function PrivacyPolicyPage() {
-return (
-<LegalLayout title="Privacy Policy">
-<p>
-UAE Biz Connect (“we”, “our”, “us”) respects your privacy. This Policy
-explains how we collect, use, and protect personal data.
-</p>
+  return (
+    <LegalLayout title="Privacy Policy">
+      <p>
+        UAE Biz Connect (“we”, “our”, “us”) respects your privacy. This Policy explains what personal data we
+        collect, why we collect it, and your rights.
+      </p>
 
-<h2 className="mt-8 text-xl font-bold">1. Information We Collect</h2>
-<ul className="list-disc pl-6 space-y-1">
-<li>Information you provide (name, email, listing details, messages)</li>
-<li>Usage/device data (IP, browser, pages, timestamps)</li>
-<li>Cookies and similar technologies</li>
-</ul>
+      <h2 className="mt-8 text-xl font-bold">1. Information We Collect</h2>
+      <ul className="list-disc pl-6 space-y-1">
+        <li>Information you provide (name, email, listing details, claim/submission content)</li>
+        <li>Technical data (IP address, browser type, device info, timestamps)</li>
+        <li>Usage data (pages viewed, navigation events, referrer where available)</li>
+        <li>Cookie preferences and essential session data</li>
+      </ul>
 
-<h2 className="mt-8 text-xl font-bold">2. How We Use Data</h2>
-<ul className="list-disc pl-6 space-y-1">
-<li>Operate and maintain the Website</li>
-<li>Publish/manage listings</li>
-<li>Improve performance and user experience</li>
-<li>Support, security, and legal compliance</li>
-</ul>
+      <h2 className="mt-8 text-xl font-bold">2. How We Use Data</h2>
+      <ul className="list-disc pl-6 space-y-1">
+        <li>Operate, secure, and maintain the directory</li>
+        <li>Process listing submissions and ownership claims</li>
+        <li>Respond to support, legal, and compliance requests</li>
+        <li>Improve website performance and user experience</li>
+      </ul>
 
-<h2 className="mt-8 text-xl font-bold">3. Current Non-Monetization Model</h2>
-<ul className="list-disc pl-6 space-y-1">
-<li>Listings are free of charge</li>
-<li>No paid advertising or sponsored placement at this stage</li>
-<li>No monetized ad targeting at this stage</li>
-</ul>
+      <h2 className="mt-8 text-xl font-bold">3. Data Sharing</h2>
+      <p>We do not sell personal data. We may share data only with:</p>
+      <ul className="list-disc pl-6 space-y-1">
+        <li>Infrastructure and hosting providers (for secure site operations)</li>
+        <li>Legal/regulatory authorities when required by law</li>
+        <li>Service providers acting under our instructions and confidentiality obligations</li>
+      </ul>
 
-<h2 className="mt-8 text-xl font-bold">4. No Sale of Personal Data</h2>
-<p>We do <strong>not</strong> sell personal data to third parties.</p>
+      <h2 className="mt-8 text-xl font-bold">4. Cookies and Consent</h2>
+      <p>
+        We use a cookie preference banner. Non-essential cookies are disabled unless you explicitly accept them.
+        Essential cookies required for security and core functionality may still be used.
+      </p>
 
-<h2 className="mt-8 text-xl font-bold">5. Contact</h2>
-<p>
-Privacy inquiries:{" "}
-<a className="text-blue-600 hover:underline" href="mailto:info@uaebizconnect.com">
-info@uaebizconnect.com
-</a>
-</p>
-</LegalLayout>
-);
+      <h2 className="mt-8 text-xl font-bold">5. Data Subject Rights</h2>
+      <p>You may request access, correction, deletion, or data portability where applicable by law.</p>
+      <p className="mt-2">
+        To submit a request, email{" "}
+        <a className="text-blue-600 hover:underline" href="mailto:info@uaebizconnect.com?subject=Data%20Subject%20Request">
+          info@uaebizconnect.com
+        </a>
+        {" "}with your request type and identifying details.
+      </p>
+
+      <h2 className="mt-8 text-xl font-bold">6. Retention</h2>
+      <p>
+        We retain personal data only as long as necessary for operational, legal, and security purposes, then
+        delete or anonymize it where appropriate.
+      </p>
+
+      <h2 className="mt-8 text-xl font-bold">7. International Compliance Notes</h2>
+      <p>
+        For users in regions with specific privacy rights (including GDPR-like frameworks), we will handle valid
+        requests according to applicable law.
+      </p>
+
+      <h2 className="mt-8 text-xl font-bold">8. Contact</h2>
+      <p>
+        Privacy and data requests: {" "}
+        <a className="text-blue-600 hover:underline" href="mailto:info@uaebizconnect.com">
+          info@uaebizconnect.com
+        </a>
+      </p>
+    </LegalLayout>
+  );
 }
