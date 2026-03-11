@@ -46,15 +46,23 @@ const { city } = await params;
 const cityName = slugToCity(city);
 
 return {
-title: `Best Businesses in ${cityName} | UAE Biz Connect`,
-description: `Find trusted businesses, services, and contact details in ${cityName}, UAE.`,
-openGraph: {
-title: `Businesses in ${cityName} | UAE Biz Connect`,
-description: `Browse local listings in ${cityName}.`,
-url: `https://uaebizconnect.com/city/${city}`,
-type: "website",
-},
-};
+    title: `Best Businesses in ${cityName} | UAE Biz Connect`,
+    description: `Find trusted businesses, services, and contact details in ${cityName}, UAE.`,
+    alternates: {
+      canonical: `/city/${city}`,
+    },
+    openGraph: {
+      title: `Businesses in ${cityName} | UAE Biz Connect`,
+      description: `Browse local listings in ${cityName}.`,
+      url: `https://uaebizconnect.com/city/${city}`,
+      type: "website",
+    },
+    twitter: {
+      card: "summary",
+      title: `Businesses in ${cityName} | UAE Biz Connect`,
+      description: `Browse local listings in ${cityName}.`,
+    },
+  };
 }
 
 export default async function CityPage({

@@ -88,15 +88,23 @@ listing.city ? ` in ${listing.city}` : ""
 }. Contact details and listing information.`;
 
 return {
-title,
-description,
-openGraph: {
-title,
-description,
-url: `https://uaebizconnect.com/listing/${listing.id}`,
-type: "website",
-},
-};
+    title,
+    description,
+    alternates: {
+      canonical: `/listing/${listing.id}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `https://uaebizconnect.com/listing/${listing.id}`,
+      type: "website",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+    },
+  };
 }
 
 export default async function ListingDetailPage({

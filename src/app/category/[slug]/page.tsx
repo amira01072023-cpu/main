@@ -46,15 +46,23 @@ const { slug } = await params;
 const categoryName = slugToLabel(slug);
 
 return {
-title: `${categoryName} Services in UAE | UAE Biz Connect`,
-description: `Find trusted ${categoryName} businesses across UAE with contact details and websites.`,
-openGraph: {
-title: `${categoryName} Listings | UAE Biz Connect`,
-description: `Browse ${categoryName} companies and services in UAE.`,
-url: `https://uaebizconnect.com/category/${slug}`,
-type: "website",
-},
-};
+    title: `${categoryName} Services in UAE | UAE Biz Connect`,
+    description: `Find trusted ${categoryName} businesses across UAE with contact details and websites.`,
+    alternates: {
+      canonical: `/category/${slug}`,
+    },
+    openGraph: {
+      title: `${categoryName} Listings | UAE Biz Connect`,
+      description: `Browse ${categoryName} companies and services in UAE.`,
+      url: `https://uaebizconnect.com/category/${slug}`,
+      type: "website",
+    },
+    twitter: {
+      card: "summary",
+      title: `${categoryName} Listings | UAE Biz Connect`,
+      description: `Browse ${categoryName} companies and services in UAE.`,
+    },
+  };
 }
 
 export default async function CategoryPage({
