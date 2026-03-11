@@ -1,0 +1,156 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { createClient } from "@/lib/supabase-browser";
+
+type Submission = { id: number; business_name: string; status: string; created_at: string };
+type Claim = { id: number; listing_id: number; claimant_name: string; status: string; created_at: string };
+type DataRequest = { id: number; full_name: string; request_type: string; status: string; created_at: string };
+
+export default function AdminDashboardPage() {
+  const supabase = createClient();
+
+  const [loading, setLoading] = useState(true);
+  const [msg, setMsg] = useState("");
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [claims, setClaims] = useState<Claim[]>([]);
+  const [requests, setRequests] = useState<DataRequest[]>([]);
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    window.location.href = "/auth";
+  };
+
+  const load = async () => {
+    try {
+      setLoading(true);
+      setMsg("");
+
+      const [sRes, cRes, dRes] = await Promise.all([
+        fetch("/api/admin/submissions", { cache: "no-store" }),
+        fetch("/api/admin/claims", { cache: "no-store" }),
+        fetch("/api/admin/data-requests", { cache: "no-store" }),
+      ]);
+
+      const [sRaw, cRaw, dRaw] = await Promise.all([sRes.text(), cRes.text(), dRes.text()]);
+
+      const sData: { error?: string; items?: Submission[] } = sRaw ? JSON.parse(sRaw) : {};
+      const cData: { error?: string; items?: Claim[] } = cRaw ? JSON.parse(cRaw) : {};
+      const dData: { error?: string; items?: DataRequest[] } = dRaw ? JSON.parse(dRaw) : {};
+
+      if (!sRes.ok || !cRes.ok || !dRes.ok) {
+        setMsg(sData.error || cData.error || dData.error || "Failed to load admin data.");
+        return;
+      }
+
+      setSubmissions(sData.items || []);
+      setClaims(cData.items || []);
+      setRequests(dData.items || []);
+    } catch (e: unknown) {
+      setMsg(e instanceof Error ? e.message : "Failed to load dashboard");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  const stats = useMemo(() => {
+    const submissionPending = submissions.filter((x) => x.status === "pending").length;
+    const claimPending = claims.filter((x) => x.status === "pending").length;
+    const requestOpen = requests.filter((x) => x.status === "pending" || x.status === "in_progress").length;
+
+    return {
+      submissionPending,
+      claimPending,
+      requestOpen,
+      totalSubmissions: submissions.length,
+      totalClaims: claims.length,
+      totalRequests: requests.length,
+    };
+  }, [submissions, claims, requests]);
+
+  return (
+    <main className="min-h-screen bg-[#f8fafc] p-6 text-slate-800">
+      <div className="max-w-6xl mx-auto bg-white border rounded-xl p-6 mt-8">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+          <div className="flex gap-2">
+            <button onClick={load} className="text-sm border border-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-50">Refresh</button>
+            <button onClick={signOut} className="text-sm border border-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-50">Sign out</button>
+          </div>
+        </div>
+
+        {msg && <p className="mb-4 text-sm text-red-600">{msg}</p>}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-5">
+          <div className="border rounded-lg p-4 bg-amber-50 border-amber-200">
+            <p className="text-xs text-amber-700">Pending Submissions</p>
+            <p className="text-2xl font-bold">{loading ? "..." : stats.submissionPending}</p>
+          </div>
+          <div className="border rounded-lg p-4 bg-blue-50 border-blue-200">
+            <p className="text-xs text-blue-700">Pending Claims</p>
+            <p className="text-2xl font-bold">{loading ? "..." : stats.claimPending}</p>
+          </div>
+          <div className="border rounded-lg p-4 bg-indigo-50 border-indigo-200">
+            <p className="text-xs text-indigo-700">Open Data Requests</p>
+            <p className="text-2xl font-bold">{loading ? "..." : stats.requestOpen}</p>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-3 mb-6">
+          <Link href="/admin/submissions" className="border rounded-lg p-4 hover:bg-slate-50">
+            <h2 className="font-semibold">Business Submissions</h2>
+            <p className="text-sm text-slate-600 mt-1">Review and approve/reject business listings.</p>
+            <p className="text-xs text-slate-500 mt-2">Total: {stats.totalSubmissions}</p>
+          </Link>
+          <Link href="/admin/claims" className="border rounded-lg p-4 hover:bg-slate-50">
+            <h2 className="font-semibold">Listing Claims</h2>
+            <p className="text-sm text-slate-600 mt-1">Validate ownership claim requests.</p>
+            <p className="text-xs text-slate-500 mt-2">Total: {stats.totalClaims}</p>
+          </Link>
+          <Link href="/admin/data-requests" className="border rounded-lg p-4 hover:bg-slate-50">
+            <h2 className="font-semibold">Data Rights Requests</h2>
+            <p className="text-sm text-slate-600 mt-1">Handle privacy access/deletion/portability requests.</p>
+            <p className="text-xs text-slate-500 mt-2">Total: {stats.totalRequests}</p>
+          </Link>
+        </div>
+
+        <section className="grid md:grid-cols-3 gap-4">
+          <div className="border rounded-lg p-4">
+            <h3 className="font-semibold mb-2">Latest Submissions</h3>
+            <ul className="text-sm space-y-1 text-slate-700">
+              {submissions.slice(0, 5).map((s) => (
+                <li key={s.id}>#{s.id} · {s.business_name} · {s.status}</li>
+              ))}
+              {!submissions.length && <li className="text-slate-500">No records.</li>}
+            </ul>
+          </div>
+
+          <div className="border rounded-lg p-4">
+            <h3 className="font-semibold mb-2">Latest Claims</h3>
+            <ul className="text-sm space-y-1 text-slate-700">
+              {claims.slice(0, 5).map((c) => (
+                <li key={c.id}>#{c.id} · Listing {c.listing_id} · {c.status}</li>
+              ))}
+              {!claims.length && <li className="text-slate-500">No records.</li>}
+            </ul>
+          </div>
+
+          <div className="border rounded-lg p-4">
+            <h3 className="font-semibold mb-2">Latest Data Requests</h3>
+            <ul className="text-sm space-y-1 text-slate-700">
+              {requests.slice(0, 5).map((r) => (
+                <li key={r.id}>#{r.id} · {r.full_name} · {r.status}</li>
+              ))}
+              {!requests.length && <li className="text-slate-500">No records.</li>}
+            </ul>
+          </div>
+        </section>
+      </div>
+    </main>
+  );
+}

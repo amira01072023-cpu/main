@@ -146,6 +146,12 @@ return (
 <h1 className="text-2xl font-bold">Admin Review - Claim Requests</h1>
 <div className="flex gap-2">
 <Link
+href="/admin"
+className="text-sm border border-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-50"
+>
+Dashboard
+</Link>
+<Link
 href="/admin/submissions"
 className="text-sm border border-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-50"
 >
