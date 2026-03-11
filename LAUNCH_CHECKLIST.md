@@ -49,6 +49,17 @@
 - [ ] `.gitignore` includes local secrets/logs/backups
 - [ ] No debug placeholders/routes left
 - [ ] Admin email restriction active
+- [ ] HTTPS/SSL enforced on production domain
+- [ ] Backups configured and restore test verified
+- [ ] Vulnerability scan completed (pre-launch + recurring)
+
+## 7.1) Compliance & Accessibility
+- [ ] Privacy Policy reviewed and published
+- [ ] Terms of Use reviewed and published
+- [ ] Cookie consent banner visible and functional
+- [ ] Accessibility Statement published
+- [ ] Data Rights Request form tested
+- [ ] Contact process for DSAR requests documented
 
 ## 8) Deployment
 - [ ] `git add . && git commit` clean

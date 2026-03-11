@@ -47,7 +47,11 @@ export default function PrivacyPolicyPage() {
       <h2 className="mt-8 text-xl font-bold">5. Data Subject Rights</h2>
       <p>You may request access, correction, deletion, or data portability where applicable by law.</p>
       <p className="mt-2">
-        To submit a request, email{" "}
+        To submit a request, use our {" "}
+        <a className="text-blue-600 hover:underline" href="/data-rights-request">
+          Data Rights Request form
+        </a>
+        {" "}or email {" "}
         <a className="text-blue-600 hover:underline" href="mailto:info@uaebizconnect.com?subject=Data%20Subject%20Request">
           info@uaebizconnect.com
         </a>
