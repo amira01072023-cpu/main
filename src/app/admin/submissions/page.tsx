@@ -42,7 +42,7 @@ setMsg("");
 const res = await fetch("/api/admin/submissions", { cache: "no-store" });
 const raw = await res.text();
 
-let data: any = {};
+let data: { error?: string; items?: Submission[] } = {};
 try {
 data = raw ? JSON.parse(raw) : {};
 } catch {
@@ -56,8 +56,8 @@ return;
 }
 
 setItems(data.items || []);
-} catch (e: any) {
-setMsg(e?.message || "Failed to load submissions");
+} catch (e: unknown) {
+setMsg(e instanceof Error ? e.message : "Failed to load submissions");
 setItems([]);
 } finally {
 setLoading(false);
@@ -80,7 +80,7 @@ body: JSON.stringify({ id, action: "approve" }),
 });
 
 const raw = await res.text();
-let data: any = {};
+let data: { error?: string; items?: Submission[] } = {};
 try {
 data = raw ? JSON.parse(raw) : {};
 } catch {
@@ -94,8 +94,8 @@ return;
 
 setMsg("✅ Submission approved and published.");
 await load();
-} catch (e: any) {
-setMsg(e?.message || "Approve failed");
+} catch (e: unknown) {
+setMsg(e instanceof Error ? e.message : "Approve failed");
 } finally {
 setActionLoadingId(null);
 }
@@ -119,7 +119,7 @@ body: JSON.stringify({ id, action: "reject", review_note }),
 });
 
 const raw = await res.text();
-let data: any = {};
+let data: { error?: string; items?: Submission[] } = {};
 try {
 data = raw ? JSON.parse(raw) : {};
 } catch {
@@ -133,8 +133,8 @@ return;
 
 setMsg("✅ Submission rejected with reason.");
 await load();
-} catch (e: any) {
-setMsg(e?.message || "Reject failed");
+} catch (e: unknown) {
+setMsg(e instanceof Error ? e.message : "Reject failed");
 } finally {
 setActionLoadingId(null);
 }

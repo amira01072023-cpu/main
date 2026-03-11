@@ -80,9 +80,9 @@ limit,
 total: count ?? 0,
 totalPages: Math.max(1, Math.ceil((count ?? 0) / limit)),
 });
-} catch (e: any) {
+} catch (e: unknown) {
 return NextResponse.json(
-{ error: e?.message || "Failed to load vendors" },
+{ error: e instanceof Error ? e.message : "Failed to load vendors" },
 { status: 500 }
 );
 }

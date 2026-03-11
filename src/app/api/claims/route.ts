@@ -51,9 +51,9 @@ return NextResponse.json({ error: error.message }, { status: 500 });
 }
 
 return NextResponse.json({ success: true });
-} catch (e: any) {
+} catch (e: unknown) {
 return NextResponse.json(
-{ error: e?.message || "Unexpected error while creating claim." },
+{ error: e instanceof Error ? e.message : "Unexpected error while creating claim." },
 { status: 500 }
 );
 }

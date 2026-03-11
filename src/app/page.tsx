@@ -418,7 +418,7 @@ Next
 </div>
 </footer>
 
-<footer style={{ backgroundImage: 'url("/footer-bg.jpg")', backgroundSize: "cover", backgroundPosition: "center" }}></footer>
+
 </main>
 );
 }
