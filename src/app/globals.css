@@ -3,6 +3,17 @@
 :root {
 --background: #ffffff;
 --foreground: #171717;
+--uae-flag-gradient: linear-gradient(
+  to bottom,
+  #ef4444 0%,
+  #ef4444 25%,
+  #ffffff 25%,
+  #ffffff 50%,
+  #16a34a 50%,
+  #16a34a 75%,
+  #111827 75%,
+  #111827 100%
+);
 }
 
 @theme inline {
@@ -77,19 +88,9 @@ z-index: 2;
 position: absolute;
 inset: 0 auto 0 0;
 width: 5px;
-background: linear-gradient(
-to bottom,
-#ef4444 0%,
-#ef4444 25%,
-#ffffff 25%,
-#ffffff 50%,
-#16a34a 50%,
-#16a34a 75%,
-#111827 75%,
-#111827 100%
-);
-opacity: 0.2;
-z-index: 1;
+background: var(--uae-flag-gradient);
+opacity: 0.85;
+z-index: 2;
 }
 
 .uae-hero-art {
@@ -256,20 +257,10 @@ position: absolute;
 left: 0;
 top: 0;
 bottom: 0;
-width: 6px;
-background: linear-gradient(
-to bottom,
-#ef4444 0%,
-#ef4444 25%,
-#ffffff 25%,
-#ffffff 50%,
-#16a34a 50%,
-#16a34a 75%,
-#111827 75%,
-#111827 100%
-);
-opacity: 0.55;
-z-index: 1;
+width: 5px;
+background: var(--uae-flag-gradient);
+opacity: 0.85;
+z-index: 3;
 }
 
 .footer-image-bg::after {
