@@ -174,19 +174,58 @@ opacity: 0.08;
 .footer-image-bg {
 position: relative;
 min-height: 280px;
-background: #0f172a url("/footer-bg.jpg") center/cover no-repeat;
+background:
+radial-gradient(circle at 85% 10%, rgba(239, 68, 68, 0.18) 0%, transparent 32%),
+radial-gradient(circle at 20% 90%, rgba(22, 163, 74, 0.18) 0%, transparent 30%),
+linear-gradient(120deg, rgba(2, 6, 23, 0.82), rgba(15, 23, 42, 0.86)),
+#0f172a url("/footer-bg.jpg") center/cover no-repeat;
+overflow: hidden;
+}
+
+.footer-image-bg::before {
+content: "";
+position: absolute;
+left: 0;
+top: 0;
+bottom: 0;
+width: 6px;
+background: linear-gradient(
+to bottom,
+#ef4444 0%,
+#ef4444 25%,
+#ffffff 25%,
+#ffffff 50%,
+#16a34a 50%,
+#16a34a 75%,
+#111827 75%,
+#111827 100%
+);
+opacity: 0.55;
+z-index: 1;
+}
+
+.footer-image-bg::after {
+content: "";
+position: absolute;
+inset: 0;
+background:
+repeating-linear-gradient(
+-30deg,
+rgba(255, 255, 255, 0.03) 0,
+rgba(255, 255, 255, 0.03) 2px,
+transparent 2px,
+transparent 18px
+);
+mix-blend-mode: soft-light;
+pointer-events: none;
+z-index: 1;
 }
 
 .footer-overlay {
 position: absolute;
 inset: 0;
-background: rgba(2, 6, 23, 0.35); /* lighter so image is visible */
-}
-
-.footer-overlay {
-position: absolute;
-inset: 0;
-background: rgba(2, 6, 23, 0.45);
+background: rgba(2, 6, 23, 0.44);
+z-index: 1;
 }
 
 @media (max-width: 900px) {
