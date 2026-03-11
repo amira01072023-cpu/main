@@ -73,6 +73,54 @@ export default function AdminDashboardPage() {
     };
   }, [submissions, claims, requests]);
 
+  const chartRows = useMemo(() => {
+    const countByStatus = (arr: { status: string }[]) =>
+      arr.reduce(
+        (acc, cur) => {
+          const s = (cur.status || "unknown").toLowerCase();
+          acc[s] = (acc[s] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>
+      );
+
+    const s = countByStatus(submissions);
+    const c = countByStatus(claims);
+    const d = countByStatus(requests);
+
+    return [
+      {
+        label: "Submissions",
+        total: submissions.length,
+        pending: s.pending || 0,
+        in_progress: s.in_progress || 0,
+        completed: s.completed || s.approved || 0,
+        rejected: s.rejected || 0,
+      },
+      {
+        label: "Claims",
+        total: claims.length,
+        pending: c.pending || 0,
+        in_progress: c.in_progress || 0,
+        completed: c.completed || c.approved || 0,
+        rejected: c.rejected || 0,
+      },
+      {
+        label: "Data Requests",
+        total: requests.length,
+        pending: d.pending || 0,
+        in_progress: d.in_progress || 0,
+        completed: d.completed || d.approved || 0,
+        rejected: d.rejected || 0,
+      },
+    ];
+  }, [submissions, claims, requests]);
+
+  const widthPct = (value: number, total: number) => {
+    if (!total) return 0;
+    return Math.round((value / total) * 100);
+  };
+
   return (
     <main className="min-h-screen bg-[#f8fafc] p-6 text-slate-800">
       <div className="max-w-6xl mx-auto bg-white border rounded-xl p-6 mt-8">
@@ -100,6 +148,32 @@ export default function AdminDashboardPage() {
             <p className="text-2xl font-bold">{loading ? "..." : stats.requestOpen}</p>
           </div>
         </div>
+
+        <section className="border rounded-lg p-4 mb-6">
+          <h2 className="font-semibold mb-3">Workflow Graphs</h2>
+          <div className="space-y-4">
+            {chartRows.map((row) => (
+              <div key={row.label}>
+                <div className="flex items-center justify-between text-sm mb-1">
+                  <span className="font-medium">{row.label}</span>
+                  <span className="text-slate-500">Total: {row.total}</span>
+                </div>
+                <div className="w-full h-4 rounded-full overflow-hidden bg-slate-100 flex">
+                  <div title="Pending" className="bg-amber-400" style={{ width: `${widthPct(row.pending, row.total)}%` }} />
+                  <div title="In Progress" className="bg-indigo-400" style={{ width: `${widthPct(row.in_progress, row.total)}%` }} />
+                  <div title="Completed" className="bg-green-500" style={{ width: `${widthPct(row.completed, row.total)}%` }} />
+                  <div title="Rejected" className="bg-red-400" style={{ width: `${widthPct(row.rejected, row.total)}%` }} />
+                </div>
+                <div className="mt-1 text-xs text-slate-600 flex flex-wrap gap-3">
+                  <span>🟨 Pending: {row.pending}</span>
+                  <span>🟦 In Progress: {row.in_progress}</span>
+                  <span>🟩 Completed: {row.completed}</span>
+                  <span>🟥 Rejected: {row.rejected}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
 
         <div className="grid md:grid-cols-3 gap-3 mb-6">
           <Link href="/admin/submissions" className="border rounded-lg p-4 hover:bg-slate-50">
