@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import SiteFooter from "@/components/SiteFooter";
 import { Megaphone, Home } from "lucide-react";
 import { createClient } from "@/lib/supabase-browser";
 
@@ -213,25 +214,7 @@ className="bg-blue-600 text-white px-5 py-2 rounded-lg disabled:opacity-60"
 </div>
 </section>
 
-<footer className="footer-image-bg relative overflow-hidden text-slate-300">
-<div className="footer-overlay" />
-
-<div className="relative z-10 max-w-6xl mx-auto px-4 py-16 grid md:grid-cols-3 gap-8">
-<div>
-<h3 className="text-white font-bold mb-3">UAE Biz Connect</h3>
-<p className="text-sm text-slate-200">Your trusted local business directory for all Emirates.</p>
-</div>
-
-<div>
-<h4 className="text-white font-semibold mb-3">Support</h4>
-<ul className="space-y-1 text-sm text-slate-200">
-<li><a className="hover:text-white" href="mailto:info@uaebizconnect.com">Contact Us</a></li>
-<li><Link className="hover:text-white" href="/privacy-policy">Privacy Policy</Link></li>
-<li><Link className="hover:text-white" href="/terms-of-use">Terms of Use</Link></li>
-</ul>
-</div>
-</div>
-</footer>
+<SiteFooter />
 </main>
 );
 }
