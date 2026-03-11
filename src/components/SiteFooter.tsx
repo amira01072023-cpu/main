@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Building2, ShieldCheck, MapPinned } from "lucide-react";
+import { Building2, ShieldCheck, MapPinned, Megaphone } from "lucide-react";
 
 export default function SiteFooter() {
   return (
@@ -8,13 +8,15 @@ export default function SiteFooter() {
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 py-14 grid gap-8 md:grid-cols-3">
         <div>
-          <h3 className="text-white font-bold text-lg mb-3">UAE Biz Connect</h3>
+          <h3 className="text-white font-bold text-lg mb-3 inline-flex items-center gap-2">
+            <Megaphone size={18} className="text-blue-300" /> UAE Biz Connect
+          </h3>
           <p className="text-sm text-slate-200 mb-4">
             Your trusted local business directory for all Emirates.
           </p>
-          <div className="space-y-2 text-xs text-slate-200">
-            <p className="inline-flex items-center gap-2"><ShieldCheck size={14} /> Verified public listings</p>
-            <p className="inline-flex items-center gap-2"><MapPinned size={14} /> UAE-wide coverage</p>
+          <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-200">
+            <p className="inline-flex items-center gap-1.5"><ShieldCheck size={14} /> Verified public listings</p>
+            <p className="inline-flex items-center gap-1.5"><MapPinned size={14} /> UAE-wide coverage</p>
           </div>
         </div>
 
@@ -50,7 +52,7 @@ export default function SiteFooter() {
       <div className="relative z-10 border-t border-white/15">
         <div className="max-w-6xl mx-auto px-4 py-3 text-xs text-slate-300 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 UAE Biz Connect. All rights reserved.</p>
-          <p>Elevating UAE business discovery with refined simplicity · Developed by Amir</p>
+          <p>Elevating UAE business discovery with refined simplicity · Developed by Amir Creeencia</p>
         </div>
       </div>
     </footer>
