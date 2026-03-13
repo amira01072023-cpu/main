@@ -1,0 +1,5 @@
+# Add priority UAEBizConnect URLs here and submit in Search Console URL Inspection.
+# Example format (one URL per line):
+# https://www.uaebizconnect.com/
+# https://www.uaebizconnect.com/category/example
+# https://www.uaebizconnect.com/city/example
